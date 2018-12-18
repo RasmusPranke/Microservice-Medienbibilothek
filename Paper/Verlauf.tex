@@ -1,0 +1,176 @@
+\documentclass{article}
+
+\begin{document}
+
+Table 1: Research strategies:
+
+Relevant types:
+
+    Solution Proposal
+
+     - Relevant because they are about how microservices work
+
+    Opinion Paper
+
+    - Relevant because they tell us why microservices are interesting
+
+    Experience Paper
+
+    - Relevant because they tell us about pros and cons of microservices in practice
+
+    - Particularly important for choosing our example app
+
+Irrelevant types:
+
+    Validation Research:
+
+    - Not our job
+
+    Evaluation Research:
+
+    - We are concerned with the state of the art now, not with its impact in the future
+
+    Philosophical Paper:
+
+    - We are concerned with the actualities of microservices, not their interpretation
+
+
+=> Relevant studies:
+    1-4
+    6-8
+    10-23
+    25-26
+    28-34
+    36-45
+    47-52
+    54-58
+    60-71
+    
+Table 2: Target problems
+
+    Only relevant when we are looking for something very specific, otherwise not useful as an initial filter.
+
+
+Table 3: Research Contribution
+Relevant Types:
+    Application:
+        - That's our topic, more or less
+    Method:
+        - That's also our topic
+    Problem Framing:
+        - Allows us to figure out the purpose and limitations of microservices.
+Irrelevant Types:
+    Reference Architecture:
+        - Useful as a starting point for our app. Archtiecture reuse is a useful type of reuse.
+    Middleware:
+        - Doesn't contribute to our research question, despite being a useful starting point for our app.
+    Design Pattern:
+        - Same as above
+    Archtitectural language:
+        - Same as above
+ 
+=> Remaining Relevant studies:
+    3
+    7-8
+    10-12
+    15-17
+    19-22
+    25-26
+    28-33
+    36-37
+    39-43
+    47-48
+    51
+    54
+    56-58
+    61-62
+    64-67
+    69-71
+    
+Table 4: Research perspective:
+
+    All aspects are relevant for our research question.
+
+
+Table 5: Vertical Scope:
+    To limit the scope of our paper (given that this is not even a bachelor thesis), we only consider the service layer.
+ 
+=> Remaining Relevant studies:
+    3
+    7
+    10
+    15
+    21-22
+    33
+    37
+    39-40
+    42
+    51
+    54
+    56-57
+    61-62
+    64
+    66-67
+    69-71
+    
+Table 6: Software lifecycle scope:
+    All stages are relevant to our research question.
+    
+    
+    
+Vom Titel her interessant:
+    70
+    
+    71
+    51
+    42
+    39
+    19
+    
+Für App interessant:
+51: Service cutter: A systematic approach to service decomposition
+  Gysel M., Kolbener L., Giersche W., Zimmermann O.
+Gibt uns Methode, um die Architektur anzuwenden
+  
+Für Paper interessant:
+    
+Wir extrahieren relevante Studien aus
+Research on Architecting Microservices: Trends, Focus, and Potential for Industrial Adoption 
+  Paolo Di Francesco, Ivano Malavolta, Patricia Lago                                                                                                                                                                                                                              
+Diese Metastuide hat nahezu, wenn nicht gar alle, Studien zu Microservices aus den 4 größten Onlinequellen extrahiert und analysiert. Damit ist die uns somit gegebene Übersicht so vollständig, wie wir es uns erhoffen können.
+
+Durch die Methodologie der Studie, aus welcher wir diese Studien extrahiert haben, halten wir alle für relevant für den aktuellen verifizierten Stand der Technik.
+    
+67: On micro-services architecture
+  Namiot, Dmitry and Sneps-Sneppe, Manfred
+  sowie
+19: The Design and Architecture of Microservices
+  A. Sill
+Wir erwarten eine grundlegende Übersicht über Microservices.
+
+71: Towards a Technique for Extracting Microservices from Monolithic Enterprise Systems
+    Levcovitz, Alessandra and Terra, Ricardo and Valente, Marco Tulio
+Wir erwarten einen Einblick in die Dekomposition von Monolithischen Systemen, was einen guten Überblick über die sinvolle Anwendung von Microservices geben sollte.
+
+39: Microservices and Their Design Trade-Offs: A Self-Adaptive Roadmap
+  S. Hassan; R. Bahsoon
+Wir erwarten einen Einblick in eine Methode zum Design von einzelnen Services eines Microservices-basierten Projektes und daraus folgend einen Einblick in die Anforderungen an ebenjene Services.
+
+Diese Studien sollten uns einen sinnvollen und umfangreichen Einstieg gewährleisten, während die Liste an Studien aus unserer Grundstudie uns im weiteren Verlauf aufgeworfene Fragen beantworten können sollte.
+
+\section{Wahl unseres Fallbeispiels: SE2-Mediathek}
+
+Mit WAM designed: Vom Grundprinzip ähnlicher Aufbau, daher erwarten wir geringen Arbeitsaufwand.
+Uns bereits bekannt, daher wenig Einarbeitung.
+Dem Kurs bekannt, daher mehr Platz in der Präsentation für Inhalte
+In Java geschrieben, daher einfach umzuschreiben, da wir mit Spring arbeiten sollen
+
+
+\section{16.12.2018: Zusammentragen des Wissens aus den Papern}
+
+Im Großen und Ganzen stimmen die Paper mit unserem Ursprünglichen Eindruck, dass wir die Mediathek entlang der bestehenden Services in Microservices unterteilen können, überein.
+Entsprechend beginnen wir im folgenden mit dem Umschreiben der Anwendung.
+
+Sollte dies wie erhofft gelingen können wir im Paper auf die Vorzüge des WAM-Ansatzes zum Design von Microservices eingehen. Sollten wir auf Probleme stoßen gilt es, diese zu überwinden und zu dokumentieren, wie wir dies getan haben.
+
+\end{document}

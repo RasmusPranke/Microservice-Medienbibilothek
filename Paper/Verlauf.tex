@@ -1,5 +1,7 @@
 \documentclass{article}
 
+\usepackage[utf8]{inputenc}
+
 \begin{document}
 
 Table 1: Research strategies:
@@ -45,7 +47,7 @@ Irrelevant types:
     47-52
     54-58
     60-71
-    
+
 Table 2: Target problems
 
     Only relevant when we are looking for something very specific, otherwise not useful as an initial filter.
@@ -68,7 +70,7 @@ Irrelevant Types:
         - Same as above
     Archtitectural language:
         - Same as above
- 
+
 => Remaining Relevant studies:
     3
     7-8
@@ -86,7 +88,7 @@ Irrelevant Types:
     61-62
     64-67
     69-71
-    
+
 Table 4: Research perspective:
 
     All aspects are relevant for our research question.
@@ -94,7 +96,7 @@ Table 4: Research perspective:
 
 Table 5: Vertical Scope:
     To limit the scope of our paper (given that this is not even a bachelor thesis), we only consider the service layer.
- 
+
 => Remaining Relevant studies:
     3
     7
@@ -112,35 +114,35 @@ Table 5: Vertical Scope:
     64
     66-67
     69-71
-    
+
 Table 6: Software lifecycle scope:
     All stages are relevant to our research question.
-    
-    
-    
+
+
+
 Vom Titel her interessant:
     70
-    
+
     71
     51
     42
     39
     19
-    
+
 Für App interessant:
 51: Service cutter: A systematic approach to service decomposition
   Gysel M., Kolbener L., Giersche W., Zimmermann O.
 Gibt uns Methode, um die Architektur anzuwenden
-  
+
 Für Paper interessant:
-    
+
 Wir extrahieren relevante Studien aus
-Research on Architecting Microservices: Trends, Focus, and Potential for Industrial Adoption 
-  Paolo Di Francesco, Ivano Malavolta, Patricia Lago                                                                                                                                                                                                                              
+Research on Architecting Microservices: Trends, Focus, and Potential for Industrial Adoption
+  Paolo Di Francesco, Ivano Malavolta, Patricia Lago
 Diese Metastuide hat nahezu, wenn nicht gar alle, Studien zu Microservices aus den 4 größten Onlinequellen extrahiert und analysiert. Damit ist die uns somit gegebene Übersicht so vollständig, wie wir es uns erhoffen können.
 
 Durch die Methodologie der Studie, aus welcher wir diese Studien extrahiert haben, halten wir alle für relevant für den aktuellen verifizierten Stand der Technik.
-    
+
 67: On micro-services architecture
   Namiot, Dmitry and Sneps-Sneppe, Manfred
   sowie
@@ -172,5 +174,17 @@ Im Großen und Ganzen stimmen die Paper mit unserem Ursprünglichen Eindruck, da
 Entsprechend beginnen wir im folgenden mit dem Umschreiben der Anwendung.
 
 Sollte dies wie erhofft gelingen können wir im Paper auf die Vorzüge des WAM-Ansatzes zum Design von Microservices eingehen. Sollten wir auf Probleme stoßen gilt es, diese zu überwinden und zu dokumentieren, wie wir dies getan haben.
+
+\section{08.01.2019:}
+
+Bewertungskriterien und unsere Erwartungen an deren Veränderung mit der neuen Architekur:
+\begin{description}
+    \item[Funktionalität] Bestehende funktionalität muss erhalten werden.
+    \item[Zuverlässigkeit] Fehlertoleranz sollte erhöht werden, durch redundanz und unabhängigkeit der einzelnen Services. Ansonsten sollte sich an der Zuverlässigkeit durch die nuéue Architektur nichts ändern.
+    \item[Benutzbarkeit] Die Kommunikation der Microservices könnte eine Verzögerung in der Anfragenbearbeitung hervorrufen und somit die Bedienbarkeit beeinträchtigen.
+    \item[Effizienz] Das Zeitverhalten wird sich wegen der Kommunikation verschlechtern, dahingegen sollte sich die Ressourcennutzung dank der Kapselung verbessern.
+    \item[Wartbarkeit] Wir erwarten, dass die Wartbarkeit in allen Aspekten durch eine stärkere Kapselung der Komponenten steigt.
+    \item[Portierbarkeit] Koexistenz und Ersetzbarkeit sollten sich verbessern, die anderen Unterkriterien sollten einen größeren Umfang erhalten, sich aber qualitativ nicht verändern.
+\end{description}
 
 \end{document}

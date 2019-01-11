@@ -166,11 +166,25 @@ Dem Kurs bekannt, daher mehr Platz in der Präsentation für Inhalte
 In Java geschrieben, daher einfach umzuschreiben, da wir mit Spring arbeiten sollen
 
 
-\section{16.12.2018: Zusammentragen des Wissens aus den Papern}
+\section{18.12.2018: Zusammentragen des Wissens aus den Papern}
 
 Im Großen und Ganzen stimmen die Paper mit unserem Ursprünglichen Eindruck, dass wir die Mediathek entlang der bestehenden Services in Microservices unterteilen können, überein.
 Entsprechend beginnen wir im folgenden mit dem Umschreiben der Anwendung.
 
 Sollte dies wie erhofft gelingen können wir im Paper auf die Vorzüge des WAM-Ansatzes zum Design von Microservices eingehen. Sollten wir auf Probleme stoßen gilt es, diese zu überwinden und zu dokumentieren, wie wir dies getan haben.
+
+\section{19.12.2018: Mediathek auf Datenbank umstellen}
+
+Wir haben uns entschieden, die bestehende Mediathek zuerst an eine Datenbank anzuschließen, da Textdateien in keinster Weise repräsentativ für "echte" Projekte sind.
+
+Uns ist aufgefallen, dass die Wahl der Art von Datenbank stark davon abhängt, wie wir die Microservices gestalten. Deshalb ziehen wir den Schritt, die Mediathek in MS zu zerlegen, vor.
+
+Wir halten fest, dass wir es für sinnvoll halten, für die Monolithische Applikation eine integrierte Datenbank zu benutzen.
+
+\subsection{Anwendung von "Towards extracting Microservices from monolithic applications"}
+
+Wir identifizieren "kundenstamm.txt" und "medienbestand.txt" als die beiden Tabellen der Mediathek. "VerleihProtokoll.txt" dagegen stellt ledigilich den Transaktionslog einer Datenbank dar und kann damit bei unseren Überlegungen außer acht gelassen werden.
+
+Unsere Analyse des Codes und damit das Ergebniss der Methode halten wir als Diagramm fest.
 
 \end{document}

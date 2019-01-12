@@ -1,0 +1,20 @@
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+
+\begin{document}
+
+\section{Was sind Microservices?}
+
+Microservices sind ein relativ neuer Ansatz der Softwarearchitektur, bei dem Software in viele kleine, unabhängige Prozesse aufgespalten wird\cite{OMA}. Jeder dieser übernimmt einen kleinen, nach fachlichen Aufgaben gebündelten Anteil der Gesamtfunktionalität gemäß des Single Responsibility Principles und kommuniziert über ein allgemeines und simples Protokoll (wie z.B. HTTP) mit anderen Services\cite{EMMA}.
+
+\section{Vor- und Nachteile von Microservices}
+
+Microservices glänzen vor allem durch eine bedeutend stärkere Kapselung als es bei monolithischer Software normalerweise der Fall ist. Durch die Trennung in verschiedene Prozesse können die Umgebungen der einzelnen Services auf ihren jeweiligen Aufgabenbereich angepasst werden. Als Komponenten der Gesamtsoftware sind sie dadurch auch nicht mehr an einen gemeinsamen Technologiestack gebunden und müssen sich auch keine Hardware mehr teilen. Die einzelnen Services können weitestgehend unabhängig voneinander verändert und ausgetauscht werden.
+
+Außerdem erleichtern Microservices die horizontale Skalierung, da die inherente Trennung in einzelne Prozesse vergleichsweise einfache Duplikation der Instanzen erlaubt. Dieses führt gleichzeitig auch zu einer besseren Fehlertoleranz, da damit jede Komponente redundant vorhanden ist.
+
+Allerdings kommen diese Vorteile nicht ohne Kosten. Microservices sind verteilte Systeme, welche in der Praxis aus vielen Gründen schwerer zu entwickeln sind. Dazu zählt zum einem, dass sie Infrastruktur benötigen, und dass sie schwerer zu testen sind. Da die Kommunikation der Services über Netzwerke stattfindet, muss außerdem eine signifikante Latenz beachtet werden. Zusätzlich muss während der Designphase auch entschieden werden wie die Funktionalität in Services aufgeteilt wird, welches die größte Hürde beim entwerfen von Microservices darstellt.\cite{OMA}
+
+\end{document}

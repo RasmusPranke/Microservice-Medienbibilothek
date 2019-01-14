@@ -17,4 +17,62 @@ Außerdem erleichtern Microservices die horizontale Skalierung, da die inherente
 
 Allerdings kommen diese Vorteile nicht ohne Kosten. Microservices sind verteilte Systeme, welche in der Praxis aus vielen Gründen schwerer zu entwickeln sind. Dazu zählt zum einem, dass sie Infrastruktur benötigen, und dass sie schwerer zu testen sind. Da die Kommunikation der Services über Netzwerke stattfindet, muss außerdem eine signifikante Latenz beachtet werden. Zusätzlich muss während der Designphase auch entschieden werden wie die Funktionalität in Services aufgeteilt wird, welches die größte Hürde beim entwerfen von Microservices darstellt.\cite{OMA}
 
+\section{Microservices mit Spring}
+
+Spring ist eine Sammlung von Frameworks zur Unterstützung der Entwicklung von verschiedensten Systemen in Java.
+Es setzt sich zusammen aus Frameworks die eine eigene Funktionalität bieten, und Solchen, die dabei helfen andere Technologien in das zu entwickelnde System einzubinden.
+
+Viele der Angebotenen Frameworks sind nützlich für das entwickeln von Microservices.
+Dabei lässt sich unterscheiden zwischen Solchen, die in vielen Arten von Systemen angewandt werden können, und Solchen, die speziell auf die Anwendung in Microservicebasierten Systemen zugeschnitten sind.
+
+\subsection{Allgemein verwendbare Frameworks}
+
+Frameworks, die bei der Entwicklung eines Microservicebasierten Systems verwendbar, aber nicht speziell auf diese Architektur zugeschnitten sind.
+
+\begin{description}
+    \item[Spring Framework] enthält generische Funktionen wie Dependency Injection, Events, Testunterstützung und vieles mehr.
+    \item[Spring Data] ist kein einzelnes Framework, sondern eine Sammlung von Frameworks welche die Datenverwaltung unterstützen.
+    \begin{description}
+        \item[Spring Data Commons] implementiert einen Repositorybasierten Ansatz zur Datenverwaltung.
+        \item[Spring Data JPA/JDBC/...] ermöglicht die Nutzung von spezifischen Datenverwaltungstechnologien mit Spring Data.
+    \end{description}
+
+    \item[Spring Cloud] ist eine Sammlung von Frameworks die das entwickeln von verteilten Systemen aller Art unterstützen.
+    \begin{description}
+        \item[Spring Cloud Config] ermöglicht das zentrale Konfigurieren der verteilten Systemkomponenten.
+        \item[Spring Cloud Security] ermöglicht das propagieren von Access Tokens um verbundenen Microservices zu signalisieren, dass ein Nutzer authentifiziert ist.
+        \item[Spring Cloud Sleuth] erlaubt es, den Datenverkehr innerhalb des verteilten Systems zu beobachten.
+    \end{description}
+\end{description}
+
+\subsection{Microservicespezifische Frameworks}
+
+Frameworks, die speziell für die Entwickklung von Microservicebasierten Systemen gedacht sind.
+
+\begin{description}
+    \item[Spring Cloud] s.o.
+    \begin{description}
+        \item[Spring Cloud Netflix] unterstützt die Integration verschiedener Netflix Open Source Software.
+        \begin{description}
+            \item[Eureka] ermöglicht es Services zu registrieren, sodass Clients diese Anfragen und entdecken können.
+            \item[Hystrix] hilft damit umzugehen, wenn benötigte Services nicht erreichbar sind.
+            \item[Ribbon] übernimmt die Aufgabe des Load Balancing.
+            \item[Zuul] verwaltet und überwacht Verbindungen zu den Microservices und nimmt Anfragen von Clients bzw. von Edge Services entgegen.
+        \end{description}
+
+        \item[Spring Cloud Stream] unterstützt das entwickeln von Eventgetriebenen Microservices die sich über Apache Kafka oder RabbitMQ Nachrichten zuschicken.
+        \item[Spring Cloud Task] ermöglicht das entwickeln von kurzlebigen Microservices die on-demand eine Aufgabe ausführen.
+    \end{description}
+\end{description}
+
+\subsection{Andere Tools}
+
+Verwendbare Tools die von Spring angeboten werden, aber keine Framework Libraries sind.
+
+\begin{description}
+    \item[Spring Boot] ist eine Library die als Startpunkt für das schnelle aufsetzen von Springbasierten Anwendungen dient.
+    \item[Spring Initializr] initialisiert ein Spring Boot Projekt mit weiteren Einstellungen und konfigurierbaren Dependencies.
+    \item[Spring Cloud Data Flow] ist ein Toolkit, welches das Vernetzen von Microservices, die mit Spring Cloud Stream oder Task erstellt wurden, anhand einer GUI oder Shell Anwendung ermöglicht.
+\end{description}
+
 \end{document}

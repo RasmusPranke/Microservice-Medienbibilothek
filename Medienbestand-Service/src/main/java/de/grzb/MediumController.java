@@ -2,8 +2,12 @@ package de.grzb;
 
 import java.util.List;
 
+import org.springframework.cloud.stream.annotation.Output;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.integration.support.MessageBuilder;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageChannel;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,9 +19,11 @@ import de.grzb.materialien.medien.CD;
 public class MediumController {
 
     private final CDRepo repository;
+    private final MediumSubscribable sub;
 
-    public MediumController(CDRepo repository) {
+    public MediumController(CDRepo repository, MediumSubscribable subscribers) {
         this.repository = repository;
+        this.sub = subscribers;
     }
 
     @RequestMapping(name = "/medium/get", method = RequestMethod.GET)
@@ -37,6 +43,13 @@ public class MediumController {
         }
 
         CD result = repository.save(new CD(titel, kommentar, interpret, spieallaenge));
+        Message<CD> message = MessageBuilder.withPayload(result).build();
+        sub.onMediumChanged().send(message);
         return new ResponseEntity<CD>(result, HttpStatus.OK);
+    }
+
+    private interface MediumSubscribable {
+        @Output
+        MessageChannel onMediumChanged();
     }
 }

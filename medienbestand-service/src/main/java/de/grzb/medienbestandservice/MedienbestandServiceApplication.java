@@ -10,33 +10,51 @@ import org.springframework.cloud.stream.messaging.Sink;
 @EnableBinding(Sink.class)
 public class MedienbestandServiceApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(MedienbestandServiceApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(MedienbestandServiceApplication.class, args);
+    }
 
-	@StreamListener(Sink.INPUT)
-	public void fuegeMediumEin(Medium medium) {
-		System.out.println("Fuege ein: " + medium);
-	}
+    @StreamListener(Sink.INPUT)
+    public void fuegeMediumEin(Medium medium) {
+        System.out.println("Fuege ein: " + medium);
+    }
 
-	public static class Medium {
-		private String titel;
+    @StreamListener(Sink.INPUT)
+    public void fuegeMediumEin(AnderesMedium medium) {
+        System.out.println("Fuege ein: " + medium);
+    }
 
-		public String getTitel()
-		{
-			return titel;
-		}
+    public static class Medium {
+        private String titel;
 
-		public void setTitel(String titel)
-		{
-			this.titel = titel;
-		}
+        public String getTitel() {
+            return titel;
+        }
 
-		@Override
-		public String toString()
-		{
-			return this.titel;
-		}
-	}
+        public void setTitel(String titel) {
+            this.titel = titel;
+        }
+
+        @Override
+        public String toString() {
+            return this.titel;
+        }
+    }
+
+    public static class AnderesMedium {
+        private String titel;
+
+        public String getTitel() {
+            return titel;
+        }
+
+        public void setTitel(String titel) {
+            this.titel = titel;
+        }
+
+        @Override
+        public String toString() {
+            return this.titel;
+        }
+    }
 }
-

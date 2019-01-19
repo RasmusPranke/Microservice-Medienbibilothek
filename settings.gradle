@@ -8,5 +8,5 @@
  */
 
 rootProject.name = 'microservice-medienbibliothek'
-include ':medienbestand-service'
+include ':medserv'
 include ':medien-library'

@@ -1,29 +1,29 @@
-package de.grzb;
+package de.grzb.medienbestandservice.restsapi;
 
 import java.util.List;
 
-import org.springframework.cloud.stream.annotation.Output;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.integration.support.MessageBuilder;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.MessageChannel;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.grzb.materialien.medien.CD;
+import de.grzb.medienbestandservice.CDRepo;
 
 @RestController
 public class MediumController {
 
     private final CDRepo repository;
-    private final MediumSubscribable sub;
+    private final Log log;
 
-    public MediumController(CDRepo repository, MediumSubscribable subscribers) {
+    public MediumController(CDRepo repository) {
         this.repository = repository;
-        this.sub = subscribers;
+        log = LogFactory.getLog(getClass());
+        log.info("Created Medium Controller!");
     }
 
     @RequestMapping(name = "/medium/get", method = RequestMethod.GET)
@@ -43,13 +43,6 @@ public class MediumController {
         }
 
         CD result = repository.save(new CD(titel, kommentar, interpret, spieallaenge));
-        Message<CD> message = MessageBuilder.withPayload(result).build();
-        sub.onMediumChanged().send(message);
         return new ResponseEntity<CD>(result, HttpStatus.OK);
-    }
-
-    private interface MediumSubscribable {
-        @Output
-        MessageChannel onMediumChanged();
     }
 }

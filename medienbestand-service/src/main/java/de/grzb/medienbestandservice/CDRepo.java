@@ -1,4 +1,4 @@
-package de.grzb;
+package de.grzb.medienbestandservice;
 
 import java.util.List;
 

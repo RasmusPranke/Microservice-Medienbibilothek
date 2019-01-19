@@ -7,4 +7,6 @@
  * in the user guide at https://docs.gradle.org/4.8.1/userguide/multi_project_builds.html
  */
 
-rootProject.name = 'medienbestand-service'
+rootProject.name = 'microservice-medienbibliothek'
+include ':medienbestand-service'
+include ':medien-library'

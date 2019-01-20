@@ -3,18 +3,17 @@ package de.grzb.medienbestandservice.restsapi;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
-//import org.apache.commons.logging.LogFactory;
-//import org.springframework.http.HttpStatus;
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.web.bind.annotation.RequestHeader;
-//import org.springframework.web.bind.annotation.RequestMapping;
-//import org.springframework.web.bind.annotation.RequestMethod;
-//import org.springframework.web.bind.annotation.RestController;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import de.grzb.materialien.medien.CD;
 import de.grzb.medienbestandservice.CDRepo;
 
-/*
 @RestController
 public class MediumController {
 
@@ -47,4 +46,3 @@ public class MediumController {
         return new ResponseEntity<CD>(result, HttpStatus.OK);
     }
 }
-*/

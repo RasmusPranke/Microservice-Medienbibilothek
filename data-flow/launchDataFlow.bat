@@ -1,2 +1,2 @@
-title "Data Flow"
-cmd /k "java.exe -D"file.encoding=windows-1252" -jar ./spring-cloud-dataflow-server-local-1.7.3.RELEASE.jar -Xmx4096"
+title Data Flow
+cmd /k "java.exe -D"file.encoding=windows-1252" -jar ./spring-cloud-dataflow-server-local-1.7.3.RELEASE.jar -Xmx4096 --spring.datasource.url=jdbc:mysql://192.168.178.2:3306/dataflow --spring.datasource.username=spring --spring.datasource.password=*seminar! --spring.datasource.driver-class-name=org.mariadb.jdbc.Driver"

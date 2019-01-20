@@ -2,12 +2,38 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage[ngerman]{babel}
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+  backgroundcolor=\color{backcolour},   commentstyle=\color{codegreen},
+  keywordstyle=\color{magenta},
+  numberstyle=\tiny\color{codegray},
+  stringstyle=\color{codepurple},
+  basicstyle=\footnotesize,
+  breakatwhitespace=false,         
+  breaklines=true,                 
+  captionpos=b,                    
+  keepspaces=true,                 
+  numbers=left,                    
+  numbersep=5pt,                  
+  showspaces=false,                
+  showstringspaces=false,
+  showtabs=false,                  
+  tabsize=2
+}
+\lstset{style=mystyle}
 
 \begin{document}
 
 \section{Was sind Microservices?}
 
-Microservices sind ein relativ neuer Ansatz der Softwarearchitektur, bei dem Software in viele kleine, unabhängige Prozesse aufgespalten wird\cite{OMA}. Jeder dieser übernimmt einen kleinen, nach fachlichen Aufgaben gebündelten Anteil der Gesamtfunktionalität gemäß des Single Responsibility Principles und kommuniziert über ein allgemeines und simples Protokoll (wie z.B. HTTP) mit anderen Services\cite{EMMA}.
+Microservices sind ein relativ neuer Ansatz der Softwarearchitektur, bei dem Software in viele kleine, unabhängige Prozesse aufgespalten wird\cite{OMA}. Jeder dieser übernimmt einen kleinen Anteil der Gesamtfunktionalität und kommuniziert mit anderen Services, um diesen zu Erfüllen\cite{EMMA}.
 
 \section{Vor- und Nachteile von Microservices}
 
@@ -74,5 +100,89 @@ Verwendbare Tools die von Spring angeboten werden, aber keine Framework Librarie
     \item[Spring Initializr] initialisiert ein Spring Boot Projekt mit weiteren Einstellungen und konfigurierbaren Dependencies.
     \item[Spring Cloud Data Flow] ist ein Toolkit, welches das Vernetzen von Microservices, die mit Spring Cloud Stream oder Task erstellt wurden, anhand einer GUI oder Shell Anwendung ermöglicht.
 \end{description}
+
+dieser Frameworks näher betrachten und sie daraufhin untersuchen, wie sie die Entwicklung von Microservices unterstützen.
+
+\section{Microservices mit Spring am Beispiel der SE2-Medienbibilothek}
+
+Wir werden im folgenden Abschnitt die Medienbibliothek aus unserer Vorlseung Softwareentwicklung 2 in eine Microservice-Architektur überführen und anhand dessen die Vorteile der Frameworks hervorheben.
+
+\subsection{Aufteilen in Microservices}
+
+Da die Medienbibliothek den WAM-Ansatz verfolgt ist sie bereits in weitesgehend unabhängige Services unterteilt. Wir können jeden davon in einen eigenen Microservice übersetzen und müssen uns (bei dieser Größenordnung) keine weiteren Gedanken um die Unterteilung machen.
+
+\subsection{Spring Boot}
+
+Um eine Spring zu verwenden muss die Anwendung als Spring Boot Application markiert und gestartet werden:
+
+\begin{lstlisting}
+@SpringBootApplication
+public class MedienbestandServiceApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(
+        	MedienbestandServiceApplication.class, args);
+    }
+}
+\end{lstlisting}
+
+Die \texttt{@SpringBootApplication}-Annotation markiert die Klasse als mit Spring Boot ausführbar, wodurch sie mit \texttt{SpringApplication.run} ausgeführt werden kann.
+
+Spring durchsucht daraufhin das aktuelle Paket sowie alle Sub-Pakete nach bestimmten Annotationen, welche andere Klassen als Module der Anwendung deklarieren. Einige davon werden in den folgenden Sektionen angesprochen.
+
+Hier zeigt sich auch eine der größten Stärken von Spring: Wir müssen uns nicht damit auseinandersetzen, wie unser Code geladen wird. Spring übernimmt die Komposition des Services und erleichtert diese damit um ein Vielfaches.
+
+\subsection{Migration zu Datenbanken}
+
+Die Medienbibliothek verwendet einfache Textdateien als Datenbanken und unterstützt keine Schreiboperationen auf diese. Da dies in keinster Weise repräsentativ für reale Anwendungen ist, ist unser erster Schritt, echte relationale Datenbanken zu verwenden.
+
+Spring stellt dafür eine Reihe an Frameworks unter dem Namen \texttt{Spring Data} bereit:
+\begin{itemize}
+        \item{Spring Data Commons} {implementiert einen Repositorybasierten Ansatz zur Datenverwaltung und bildet die Grundlage für alle weiteren Spring Data Module.}
+        \item{Spring Data JPA/JDBC/...} ermöglicht die Nutzung von spezifischen Datenverwaltungstechnologien mit Spring Data.
+\end{itemize}
+
+Jedes dieser Module bezieht sich dabei auf eine spezifische Technologie. Da wir uns für eine relationale Datenbank entschieden haben sind für uns lediglich JDBC und JPA interessant.
+
+\subsubsection{JDBC}
+
+JDBC abstrahiert die Verbindung zu einer Datenbank und stellt Methoden bereit, um via SQL auf diese zuzugreifen. Um via JDBC auf eine Datenbank zuzugreigen benötigt man lediglich eine \texttt{JdbcTemplate}-Deklaration mit der \texttt{Autowired}-Annotation:
+
+\begin{lstlisting}
+public class Exampleclass {
+    @Autowired
+    JdbcTemplate jdbcTemplate;
+}
+\end{lstlisting}
+
+Spring sucht sich nun anhand der vorhandenen Module sowie den Einstellungsdateien alle Informationen zur Datenbank zusammen, stellt eine Verbindung zu dieser her und stellt diese mithilfe dieser \texttt{JdbcTemplate} automatisch (dank der \texttt{Autowired}-Annotation) bereit. Damit reduziert sich der Aufwand, eine Datenbank zu benutzen, auf das Schreiben und Auswerten der Queries:
+
+\begin{lstlisting}
+log.info("Creating tables");
+
+dbcTemplate.execute("DROP TABLE customers IF EXISTS");
+ jdbcTemplate.execute("CREATE TABLE customers(" + "id SERIAL, first_name VARCHAR(255), last_name VARCHAR(255))");
+
+// Uses JdbcTemplate's batchUpdate operation to bulk load data
+jdbcTemplate.batchUpdate(
+	"INSERT INTO customers(first_name, last_name)
+		VALUES (?,?)", [["Josh", "Doe"], ["Steffen", "Harb"]]);
+
+log.info("Querying for customer records where first_name = 'Josh':");
+jdbcTemplate.query(
+                "SELECT id, first_name, last_name FROM customers WHERE first_name = ?", new Object[] { "Josh" },
+                (rs, rowNum) -> new Customer(rs.getLong("id"), rs.getString("first_name"), rs.getString("last_name"))
+        ).forEach(customer -> log.info(customer.toString()));
+\end{lstlisting}
+
+\subsubsection{JDA}
+
+JDA abstrahiert wie JDBC die Datenbankverbindung, stellt aber gleichzeitig einen Wrapper für Datenbankabfragen dar. Eine JDA-Kompatible Datenbank lässt sich in einer einzelnen Interface-Deklaration definieren:
+
+\begin{lstlisting}
+public interface CDRepo extends CrudRepository<CD, CD.CDId> {}
+\end{lstlisting}
+
+Dieses Interface deklariert eine Datenbank, welche \texttt{CD}s anhand des Schlüssels \texttt{CD.CDId} speichert. Sie kann wie die \texttt{JdbcTemplate} mit der \texttt{Autowired}-Annotation automatisch in Klassen injeziert werden und stellt verschieden Grundlegende Operationen bereit. JDA erlaubt keine freien SQL-Queries und ist damit deutlich eingeschränkter als \texttt{JDBC}.
 
 \end{document}

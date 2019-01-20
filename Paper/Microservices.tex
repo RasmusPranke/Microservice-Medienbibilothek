@@ -5,27 +5,30 @@
 \usepackage{listings}
 \usepackage{color}
 
-\definecolor{codegreen}{rgb}{0,0.6,0}
-\definecolor{codegray}{rgb}{0.5,0.5,0.5}
-\definecolor{codepurple}{rgb}{0.58,0,0.82}
-\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\definecolor{backcolour}{RGB}{253, 246, 227}
+\definecolor{codeorange}{RGB}{203, 75, 22}
+\definecolor{codeyellow}{RGB}{181, 137, 0}
+\definecolor{codecyan}{RGB}{42, 161, 152}
+\definecolor{codegray}{RGB}{147, 161, 161}
 
 \lstdefinestyle{mystyle}{
-  backgroundcolor=\color{backcolour},   commentstyle=\color{codegreen},
-  keywordstyle=\color{magenta},
+  backgroundcolor=\color{backcolour},
+  commentstyle=\color{codeorange},
+  keywordstyle=\color{codeyellow},
   numberstyle=\tiny\color{codegray},
-  stringstyle=\color{codepurple},
-  basicstyle=\footnotesize,
-  breakatwhitespace=false,         
-  breaklines=true,                 
-  captionpos=b,                    
-  keepspaces=true,                 
-  numbers=left,                    
-  numbersep=5pt,                  
-  showspaces=false,                
+  stringstyle=\color{codecyan},
+  basicstyle=\footnotesize\ttfamily,
+  breakatwhitespace=false,
+  breaklines=true,
+  captionpos=b,
+  keepspaces=true,
+  numbers=left,
+  numbersep=5pt,
+  showspaces=false,
   showstringspaces=false,
-  showtabs=false,                  
-  tabsize=2
+  showtabs=false,
+  tabsize=2,
+  language=Java
 }
 \lstset{style=mystyle}
 

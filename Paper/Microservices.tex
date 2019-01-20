@@ -37,15 +37,24 @@
 
 \section{Was sind Microservices?}
 
-Microservices sind ein relativ neuer Ansatz der Softwarearchitektur, bei dem Software in viele kleine, unabhängige Prozesse aufgespalten wird\cite{OMA}. Jeder dieser übernimmt einen kleinen Anteil der Gesamtfunktionalität und kommuniziert mit anderen Services, um diesen zu Erfüllen\cite{EMMA}.
+Microservices sind ein relativ neuer Ansatz der Softwarearchitektur, bei dem Software in viele kleine, unabhängige Prozesse aufgespalten wird\cite{OMA}.
+Jeder dieser übernimmt einen kleinen Anteil der Gesamtfunktionalität und kommuniziert mit anderen Services, um diesen zu Erfüllen\cite{EMMA}.
 
 \section{Vor- und Nachteile von Microservices}
 
-Microservices glänzen vor allem durch eine bedeutend stärkere Kapselung als es bei monolithischer Software normalerweise der Fall ist. Durch die Trennung in verschiedene Prozesse können die Umgebungen der einzelnen Services auf ihren jeweiligen Aufgabenbereich angepasst werden. Als Komponenten der Gesamtsoftware sind sie dadurch auch nicht mehr an einen gemeinsamen Technologiestack gebunden und müssen sich auch keine Hardware mehr teilen. Die einzelnen Services können weitestgehend unabhängig voneinander verändert und ausgetauscht werden.
+Microservices glänzen vor allem durch eine bedeutend stärkere Kapselung als es bei monolithischer Software normalerweise der Fall ist.
+Durch die Trennung in verschiedene Prozesse können die Umgebungen der einzelnen Services auf ihren jeweiligen Aufgabenbereich angepasst werden.
+Als Komponenten der Gesamtsoftware sind sie dadurch auch nicht mehr an einen gemeinsamen Technologiestack gebunden und müssen sich auch keine Hardware mehr teilen.
+Die einzelnen Services können weitestgehend unabhängig voneinander verändert und ausgetauscht werden.
 
-Außerdem erleichtern Microservices die horizontale Skalierung, da die inherente Trennung in einzelne Prozesse vergleichsweise einfache Duplikation der Instanzen erlaubt. Dieses führt gleichzeitig auch zu einer besseren Fehlertoleranz, da damit jede Komponente redundant vorhanden ist.
+Außerdem erleichtern Microservices die horizontale Skalierung, da die inherente Trennung in einzelne Prozesse vergleichsweise einfache Duplikation der Instanzen erlaubt.
+ Dieses führt gleichzeitig auch zu einer besseren Fehlertoleranz, da damit jede Komponente redundant vorhanden ist.
 
-Allerdings kommen diese Vorteile nicht ohne Kosten. Microservices sind verteilte Systeme, welche in der Praxis aus vielen Gründen schwerer zu entwickeln sind. Dazu zählt zum einem, dass sie Infrastruktur benötigen, und dass sie schwerer zu testen sind. Da die Kommunikation der Services über Netzwerke stattfindet, muss außerdem eine signifikante Latenz beachtet werden. Zusätzlich muss während der Designphase auch entschieden werden wie die Funktionalität in Services aufgeteilt wird, welches die größte Hürde beim entwerfen von Microservices darstellt.\cite{OMA}
+Allerdings kommen diese Vorteile nicht ohne Kosten.
+ Microservices sind verteilte Systeme, welche in der Praxis aus vielen Gründen schwerer zu entwickeln sind.
+ Dazu zählt zum einem, dass sie Infrastruktur benötigen, und dass sie schwerer zu testen sind.
+ Da die Kommunikation der Services über Netzwerke stattfindet, muss außerdem eine signifikante Latenz beachtet werden.
+ Zusätzlich muss während der Designphase auch entschieden werden wie die Funktionalität in Services aufgeteilt wird, welches die größte Hürde beim entwerfen von Microservices darstellt.\cite{OMA}
 
 \section{Microservices mit Spring}
 
@@ -105,19 +114,18 @@ Verwendbare Tools die von Spring angeboten werden, aber keine Framework Librarie
     \item[Spring Cloud Data Flow] ist ein Toolkit, welches das Vernetzen von Microservices, die mit Spring Cloud Stream oder Task erstellt wurden, anhand einer GUI oder Shell Anwendung ermöglicht.
 \end{description}
 
-dieser Frameworks näher betrachten und sie daraufhin untersuchen, wie sie die Entwicklung von Microservices unterstützen.
-
 \section{Microservices mit Spring am Beispiel der SE2-Medienbibilothek}
 
 Wir werden im folgenden Abschnitt die Medienbibliothek aus unserer Vorlseung Softwareentwicklung 2 in eine Microservice-Architektur überführen und anhand dessen die Vorteile der Frameworks hervorheben.
 
 \subsection{Aufteilen in Microservices}
 
-Da die Medienbibliothek den WAM-Ansatz verfolgt ist sie bereits in weitesgehend unabhängige Services unterteilt. Wir können jeden davon in einen eigenen Microservice übersetzen und müssen uns (bei dieser Größenordnung) keine weiteren Gedanken um die Unterteilung machen.
+Da die Medienbibliothek den WAM-Ansatz verfolgt ist sie bereits in weitesgehend unabhängige Services unterteilt.
+ Wir können jeden davon in einen eigenen Microservice übersetzen und müssen uns (bei dieser Größenordnung) keine weiteren Gedanken um die Unterteilung machen.
 
 \subsection{Spring Boot}
 
-Um eine Spring zu verwenden muss die Anwendung als Spring Boot Application markiert und gestartet werden:
+Um Spring zu verwenden muss die Anwendung als Spring Boot Application markiert und gestartet werden:
 
 \begin{lstlisting}
 @SpringBootApplication
@@ -132,13 +140,16 @@ public class MedienbestandServiceApplication {
 
 Die \texttt{@SpringBootApplication}-Annotation markiert die Klasse als mit Spring Boot ausführbar, wodurch sie mit \texttt{SpringApplication.run} ausgeführt werden kann.
 
-Spring durchsucht daraufhin das aktuelle Paket sowie alle Sub-Pakete nach bestimmten Annotationen, welche andere Klassen als Module der Anwendung deklarieren. Einige davon werden in den folgenden Sektionen angesprochen.
+Spring durchsucht daraufhin das aktuelle Paket sowie alle Sub-Pakete nach bestimmten Annotationen, welche andere Klassen als Module der Anwendung deklarieren.
+ Einige davon werden in den folgenden Sektionen angesprochen.
 
-Hier zeigt sich auch eine der größten Stärken von Spring: Wir müssen uns nicht damit auseinandersetzen, wie unser Code geladen wird. Spring übernimmt die Komposition des Services und erleichtert diese damit um ein Vielfaches.
+Hier zeigt sich auch eine der größten Stärken von Spring: Wir müssen uns nicht damit auseinandersetzen, wie unser Code geladen wird.
+ Spring übernimmt die Komposition des Services und erleichtert diese damit um ein Vielfaches.
 
 \subsection{Migration zu Datenbanken}
 
-Die Medienbibliothek verwendet einfache Textdateien als Datenbanken und unterstützt keine Schreiboperationen auf diese. Da dies in keinster Weise repräsentativ für reale Anwendungen ist, ist unser erster Schritt, echte relationale Datenbanken zu verwenden.
+Die Medienbibliothek verwendet einfache Textdateien als Datenbanken und unterstützt keine Schreiboperationen auf diese.
+ Da dies in keinster Weise repräsentativ für reale Anwendungen ist, ist unser erster Schritt, echte relationale Datenbanken zu verwenden.
 
 Spring stellt dafür eine Reihe an Frameworks unter dem Namen \texttt{Spring Data} bereit:
 \begin{itemize}
@@ -146,11 +157,13 @@ Spring stellt dafür eine Reihe an Frameworks unter dem Namen \texttt{Spring Dat
         \item{Spring Data JPA/JDBC/...} ermöglicht die Nutzung von spezifischen Datenverwaltungstechnologien mit Spring Data.
 \end{itemize}
 
-Jedes dieser Module bezieht sich dabei auf eine spezifische Technologie. Da wir uns für eine relationale Datenbank entschieden haben sind für uns lediglich JDBC und JPA interessant.
+Jedes dieser Module bezieht sich dabei auf eine spezifische Technologie.
+ Da wir uns für eine relationale Datenbank entschieden haben sind für uns lediglich JDBC und JPA interessant.
 
 \subsubsection{JDBC}
 
-JDBC abstrahiert die Verbindung zu einer Datenbank und stellt Methoden bereit, um via SQL auf diese zuzugreifen. Um via JDBC auf eine Datenbank zuzugreigen benötigt man lediglich eine \texttt{JdbcTemplate}-Deklaration mit der \texttt{Autowired}-Annotation:
+JDBC abstrahiert die Verbindung zu einer Datenbank und stellt Methoden bereit, um via SQL auf diese zuzugreifen.
+Um via JDBC auf eine Datenbank zuzugreifen benötigt man lediglich eine \texttt{JdbcTemplate}-Deklaration mit der \texttt{Autowired}-Annotation:
 
 \begin{lstlisting}
 public class Exampleclass {
@@ -159,34 +172,32 @@ public class Exampleclass {
 }
 \end{lstlisting}
 
-Spring sucht sich nun anhand der vorhandenen Module sowie den Einstellungsdateien alle Informationen zur Datenbank zusammen, stellt eine Verbindung zu dieser her und stellt diese mithilfe dieser \texttt{JdbcTemplate} automatisch (dank der \texttt{Autowired}-Annotation) bereit. Damit reduziert sich der Aufwand, eine Datenbank zu benutzen, auf das Schreiben und Auswerten der Queries:
+Spring sucht sich nun anhand der vorhandenen Module sowie den Einstellungsdateien alle Informationen zur Datenbank zusammen, stellt eine Verbindung zu dieser her und stellt diese mithilfe dieser \texttt{JdbcTemplate} automatisch (dank der \texttt{Autowired}-Annotation) bereit.
+ Damit reduziert sich der Aufwand, eine Datenbank zu benutzen, auf das Schreiben und Auswerten der Queries:
 
 \begin{lstlisting}
 log.info("Creating tables");
 
 dbcTemplate.execute("DROP TABLE customers IF EXISTS");
- jdbcTemplate.execute("CREATE TABLE customers(" + "id SERIAL, first_name VARCHAR(255), last_name VARCHAR(255))");
+jdbcTemplate.execute("CREATE TABLE customers(" + "id SERIAL, first_name VARCHAR(255), last_name VARCHAR(255))");
 
 // Uses JdbcTemplate's batchUpdate operation to bulk load data
-jdbcTemplate.batchUpdate(
-	"INSERT INTO customers(first_name, last_name)
-		VALUES (?,?)", [["Josh", "Doe"], ["Steffen", "Harb"]]);
+jdbcTemplate.batchUpdate("INSERT INTO customers(first_name, last_name) VALUES (?,?)", [["Josh", "Doe"], ["Steffen", "Harb"]]);
 
-log.info("Querying for customer records where first_name = 'Josh':");
-jdbcTemplate.query(
-                "SELECT id, first_name, last_name FROM customers WHERE first_name = ?", new Object[] { "Josh" },
-                (rs, rowNum) -> new Customer(rs.getLong("id"), rs.getString("first_name"), rs.getString("last_name"))
-        ).forEach(customer -> log.info(customer.toString()));
+// Selects based on the first name.
+jdbcTemplate.query("SELECT id, first_name, last_name FROM customers WHERE first_name = ?", new Object[] { "Josh" }, (rs, rowNum) -> new Customer(rs.getLong("id"), rs.getString("first_name"), rs.getString("last_name"))).forEach(customer -> log.info(customer.toString()));
 \end{lstlisting}
 
-\subsubsection{JDA}
+\subsubsection{JPA}
 
-JDA abstrahiert wie JDBC die Datenbankverbindung, stellt aber gleichzeitig einen Wrapper für Datenbankabfragen dar. Eine JDA-Kompatible Datenbank lässt sich in einer einzelnen Interface-Deklaration definieren:
+JPA abstrahiert wie JDBC die Datenbankverbindung, stellt aber gleichzeitig einen Wrapper für Datenbankabfragen dar. Eine JPA-Kompatible Datenbank lässt sich in einer einzelnen Interface-Deklaration definieren:
 
 \begin{lstlisting}
 public interface CDRepo extends CrudRepository<CD, CD.CDId> {}
 \end{lstlisting}
 
-Dieses Interface deklariert eine Datenbank, welche \texttt{CD}s anhand des Schlüssels \texttt{CD.CDId} speichert. Sie kann wie die \texttt{JdbcTemplate} mit der \texttt{Autowired}-Annotation automatisch in Klassen injeziert werden und stellt verschieden Grundlegende Operationen bereit. JDA erlaubt keine freien SQL-Queries und ist damit deutlich eingeschränkter als \texttt{JDBC}.
+Dieses Interface deklariert eine Datenbank, welche \texttt{CD}s anhand des Schlüssels \texttt{CD.CDId} speichert.
+ Sie kann wie die \texttt{JdbcTemplate} mit der \texttt{Autowired}-Annotation automatisch in Klassen injeziert werden und stellt verschieden Grundlegende Operationen bereit.
+ JPA erlaubt keine freien SQL-Queries und ist damit deutlich eingeschränkter als \texttt{JDBC}.
 
 \end{document}

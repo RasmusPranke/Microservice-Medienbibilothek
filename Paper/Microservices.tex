@@ -197,14 +197,75 @@ public interface CDRepo extends CrudRepository<CD, CD.CDId> {}
 \end{lstlisting}
 
 Dieses Interface deklariert eine Datenbank, welche \texttt{CD}s anhand des Schlüssels \texttt{CD.CDId} speichert.
-Sie kann wie die \texttt{JdbcTemplate} mit der \texttt{Autowired}-Annotation automatisch in Klassen injeziert werden und stellt verschieden Grundlegende Operationen bereit.
+Sie kann wie die \texttt{JdbcTemplate} mit der \texttt{@Autowired}-Annotation automatisch in Klassen injeziert werden und stellt verschieden Grundlegende Operationen bereit.
 JPA erlaubt keine freien SQL-Queries und ist damit deutlich eingeschränkter als \texttt{JDBC}.
 
-\subsection{Spring Data Commons}
+Um eine Klasse mit \texttt{JPA} zu nutzen müssen wir sie allerdings zuerst vorbereiten.
+Im Falle einer einfachen Datenklasse müsste man dafür lediglich die \texttt{@Entity}-Annotation setzen und die Schlüsselfelder mit der \texttt{@Id}-Annotation versehen.
 
-Unabhängig davon, welche der bedien Technologien verwendet werden, müssen die zu verwendenden Datenklassen als für die Datenbank nutzbar deklariert werden.
-Im Falle einer einfachen Datenklasse muss man dafür lediglich die \texttt{@Entity}-Annotation setzen und die Schlüsselfelder mit der \texttt{@Id}-Annotation versehen.
-In der Medienbibilothek allerdings werden die Eigenschaften der Medien vererbt. 
+In der Medienbibilothek allerdings teilen sich alle Medien die gemeinsame Elternklasse \texttt{AbstractMedium}, in welcher der Titel des Mediums deklariert wird.
+Diese Struktur machen wir mit 2 weiteren Annotations und ein wenig Schreibarbeit für die Datenbank nutzbar.
+Zum Einem verwenden wir die \texttt{@MappedSuperclass}-Annotation in \texttt{AbstractMedium}, um anzugeben, dass die Felder von \texttt{AbstractMedium} auch in Subklassen als Datenbankfelder verwendet werden sollen.
+
+Zum Anderen müssen wir, da das Feld \texttt{\_titel} ein Schlüsselfeld sein soll, es mit \texttt{@Id} versehen.
+Damit diese auch in den Unterklassen als Schlüssel verwendet wird müssen wir außerdem eine Id-Klasse definieren.
+Dazu schreiben wir eine Klasse, deren Felder den Typ und Namen der gewünschten Schlüssel teilen und fügen der entsprechenden Datenklasse die \texttt{@IdClass}-Annotation an, in der wir die Id-Klasse als Argument angeben.
+
+Die fertig vorbereite Klasse sieht dann so aus:
+
+\begin{lstlisting}
+// Abstract Medium
+@MappedSuperclass
+public class AbstractMedium implements Medium {
+    /**
+     * Gebuehr fuer einen Tag
+     */
+    private final int _tagesmietgebuehr;
+
+    /**
+     * Ein Kommentar zum Medium
+     */
+    private String _kommentar;
+
+    /**
+     * Der Titel des Mediums
+     * 
+     */
+    @Id
+    private String _titel;
+    
+    // Methoden gekuerzt, da unveraendert
+}
+
+// CD
+@Entity
+@IdClass(value = CD.CDId.class)
+public class CD extends AbstractMedium implements Medium {
+    public static class CDId implements Serializable {
+        private String _interpret;
+        private String _titel;
+
+        public CDId(String _titel, String _interpret) {
+            super();
+            this._interpret = _interpret;
+            this._titel = _titel;
+        }
+    }
+
+    /**
+     * Der Interpret der CD
+     */
+    @Id
+    private String _interpret;
+
+    /**
+     * Die Spiellaenge der CD in Minuten
+     */
+    private int _spiellaenge;
+    
+    // Methoden gekuerzt, da unveraendert
+}
+\end{lstlisting}
 
 \subsection{Spring Cloud Stream}
 

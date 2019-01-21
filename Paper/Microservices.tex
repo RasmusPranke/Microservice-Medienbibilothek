@@ -5,6 +5,8 @@
 \usepackage{listings}
 \usepackage{color}
 \usepackage{graphicx}
+\usepackage{cite}
+\usepackage{hyperref}
 
 \definecolor{backcolour}{RGB}{253, 246, 227}
 \definecolor{codeorange}{RGB}{203, 75, 22}
@@ -34,15 +36,18 @@
 }
 \lstset{style=mystyle}
 
+\author{Nikolai Elich & Rasmus Pranke}
+\title{Microservices am Beispiel mit Spring}
+
 \begin{document}
 
-\begin{abstract}
+\maketitle
 
+\begin{abstract}
 Die Microservice-Architektur ist eine neue Entwicklung im Bereich Software-Engineering, die eine einfachere Entwicklung und Skalierung von komplexen Softwaresystemen verspricht.
 Das Spring-Framework verspricht, (unter anderem) diese Art von Architektur stark zu vereinfachen und innerhalb kurzer Zeit auch komplizierte Systeme lauffähig zu machen.
-In diesem Paper übetragen wir eine sehr einfache monolithische Software mit Spring in eine Microservice-Architektur und betrachten dabei, inwiefern Spring uns dabei unterstützt.
-Dank der durch Spring bereitgestellten Technologien gelingt uns dieses trotz fehlender Vorkentnisse in einem sehr kurzen Zeitrahmen.
-
+In diesem Paper übertragen wir eine sehr einfache monolithische Software mit Spring in eine Microservice-Architektur und betrachten dabei, inwiefern Spring uns dabei unterstützt.
+Dank der durch Spring bereitgestellten Technologien gelingt uns dieses trotz fehlender Vorkenntnisse in einem sehr kurzen Zeitrahmen.
 \end{abstract}
 
 \section{Einleitung}
@@ -365,4 +370,6 @@ Die größten Schwierigkeiten einer Microservice-Architektur liegen normalerweis
 Die meisten dieser Schwierigkeiten werden von Spring ohne Aufwand seitens der Programmierers gelöst.
 Damit bietet Spring eine wichtige Grundlage für gutes Software-Engineering in der Form einer wiederverwendbaren und abstrakten Basis, mit der sich individuell gestaltete Komponenten verbinden lassen.
 
+\bibliographystyle{plain}
+\bibliography{bibtex_file}
 \end{document}

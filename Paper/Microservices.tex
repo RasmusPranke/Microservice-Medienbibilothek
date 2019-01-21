@@ -4,6 +4,7 @@
 \usepackage[ngerman]{babel}
 \usepackage{listings}
 \usepackage{color}
+\usepackage{graphicx}
 
 \definecolor{backcolour}{RGB}{253, 246, 227}
 \definecolor{codeorange}{RGB}{203, 75, 22}
@@ -229,11 +230,11 @@ public class AbstractMedium implements Medium {
 
     /**
      * Der Titel des Mediums
-     * 
+     *
      */
     @Id
     private String _titel;
-    
+
     // Methoden gekuerzt, da unveraendert
 }
 
@@ -262,23 +263,24 @@ public class CD extends AbstractMedium implements Medium {
      * Die Spiellaenge der CD in Minuten
      */
     private int _spiellaenge;
-    
+
     // Methoden gekuerzt, da unveraendert
 }
 \end{lstlisting}
 
 \subsection{Spring Cloud Stream}
 
-Spring Cloud Stream (SCS) bietet Unterstützung dafür Microservices zu entwickeln, die sich über einen Messagingservice verbinden.
-Bisher unterstützt SCS dafür Apache Kafka und RabbitMQ, für unser Projekt haben wir uns für Apache Kafka entschieden.
-SCS bietet allerdings eine allgemeine Syntax, welche von dem gewählten Messagingservice unabhängig ist.
+Spring Cloud Stream (SCSt) bietet Unterstützung dafür Microservices zu entwickeln, die sich mit einem Message Broker verbinden.
+Dieser dient dazu, Daten nach dem publish-subscribe-Modell unter den Microservices zu verteilen.
+Bisher unterstützt SCSt dafür Apache Kafka und RabbitMQ, für unser Projekt haben wir uns für Apache Kafka entschieden.
+SCSt bietet allerdings eine allgemeine Syntax, welche von dem gewählten Broker unabhängig ist.
 
-Damit ein Microservice mit dem Messagingservice interagieren kann, muss ein Interface angeboten werden welches die Input- und Outputkanäle des Service definiert.
-Falls es nur jeweils maximal einen Input- und Outputkanal geben soll, reicht es die in SCS vordefinierten Interfaces \texttt{Sink}, \texttt{Source} und \texttt{Processor} zu verwenden.
+Damit ein Microservice mit dem Broker interagieren kann, muss ein Interface angeboten werden welches die Input- und Outputkanäle des Service definiert.
+Falls es nur jeweils maximal einen Input- und Outputkanal geben soll, reicht es die in SCSt vordefinierten Interfaces \texttt{Sink}, \texttt{Source} und \texttt{Processor} zu verwenden.
 Dabei definiert \texttt{Sink} einen Inputkanal, \texttt{Source} einen Outputkanal und \texttt{Processor} erbt von beiden.
 
-Methoden, welche mit dem Messagingservice interagieren sollen, müssen ebenfalls entsprechend annotiert werden.
-Ein simpler Service der eine Nachricht erhält, anhand dessen Operationen ausführt und dann eine Nachricht zurück/weiter schickt, sähe folgendermaßen aus:
+Methoden, welche mit dem Broker interagieren sollen, müssen ebenfalls entsprechend annotiert werden.
+Ein simpler Service der eine Nachricht erhält, anhand dessen Operationen ausführt und dann eine Nachricht weiter schickt, sieht beispielsweise folgendermaßen aus:
 \begin{lstlisting}
 @EnableBinding{Processor}
 public class MedienProcessor {
@@ -321,4 +323,24 @@ Der Wert von \texttt{condition} ist ein Spring Expression Language (SpEL) Ausdru
 
 Nachdem die Methoden zum Senden, Empfangen, und Verarbeiten der Nachrichten also fertig sind, müssen die Verbindungen der Microservices zu Kafka oder RabbitMQ konfiguriert werden.
 In den meisten Fällen kann die manuelle Konfigurierung aber komplett umgangen werden, durch das verwenden von Spring Cloud Data Flow.
+
+\subsection{Spring Cloud Data Flow}
+
+Spring Cloud Data Flow (SCDF) ermöglicht das Aufsetzen von Daten-Pipelines mit Microservices die mit SCSt oder Spring Cloud Task entwickelt wurden.
+Um SCDF zu verwenden, muss Apache Kafka oder RabbitMQ auf dem System installiert sein und laufen.
+SCDF kann als .jar heruntergeladen und ausgeführt werden und startet einen Server, der REST-Endpoints anbietet um die Vernetzung von Microservices vorzunehmen.
+
+Um mit dem Server zu interagieren bietet Spring sowohl eine Shell-Applikation als auch ein graphisches Interface im Browser an, beide vereinfachen das Aufrufen der REST-Endpoints.
+Wir haben das graphische Interface verwendet, da der Umgang damit einfacher zu erlernen ist, als mit dem Shell Interface.
+
+Das folgende Beispiel zeigt wie man in SCDF eine Pipeline definieren kann, die Daten zu neuen Medien aus Dateien einliest, diese zu Medien-Objekten konvertiert, und abschließend die Objekte an den Medienbestandservice schickt, welcher diese in der Datenbank abspeichern.
+Die Ergebnisse des Konvertierens werden außerdem von einem separaten Microservice geloggt.
+Dazu muss man zunächst die ausführbaren .jar Dateien der Microservices bei SCDF registrieren und angeben, ob sie eine Source, einen Processor, oder eine Sink darstellen.
+Danach lässt sich über das graphische Interface der folgende Graph zusammenstellen, welcher die Pipeline definiert.\medskip\\
+\includegraphics[width=\textwidth]{stream-small.png}
+
+Dies gibt SCDF alle Informationen die es benötigt, um die Konfigurierung vorzunehmen und die Pipeline zu deployen.
+
+SCDF ist extrem leicht erlernbar und ermöglicht mit minimalem Aufwand das Definieren und konfigurieren von Daten-Pipelines.
+Es erlaubt außerdem, tiefere Konfigurierung des Deployments, wie zum Beispiel das Angeben der Anzahl von Instanzen, die von einem Service erstellt werden sollen, sowie das zuweisen von Rechenkapazität für einzelne Services.
 \end{document}

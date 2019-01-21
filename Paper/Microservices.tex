@@ -50,6 +50,12 @@ In diesem Paper übertragen wir eine sehr einfache monolithische Software mit Sp
 Dank der durch Spring bereitgestellten Technologien gelingt uns dieses trotz fehlender Vorkenntnisse in einem sehr kurzen Zeitrahmen.
 \end{abstract}
 
+\pagebreak
+
+\tableofcontents
+
+\pagebreak
+
 \section{Einleitung}
 
 \subsection{Was sind Microservices?}
@@ -61,11 +67,11 @@ Jeder dieser übernimmt einen kleinen Anteil der Gesamtfunktionalität und kommu
 
 Microservices glänzen vor allem durch eine bedeutend stärkere Kapselung als es bei monolithischer Software normalerweise der Fall ist.
 Durch die Trennung in verschiedene Prozesse können die Umgebungen der einzelnen Services auf ihren jeweiligen Aufgabenbereich angepasst werden.
-Als Komponenten der Gesamtsoftware sind sie dadurch auch nicht mehr an einen gemeinsamen Technologiestack gebunden und müssen sich auch keine Hardware mehr teilen.
+Als Komponenten der Gesamtsoftware sind sie dadurch nicht mehr an einen gemeinsamen Technologiestack gebunden und müssen sich auch keine Hardware mehr teilen.
 Die einzelnen Services können weitestgehend unabhängig voneinander verändert und ausgetauscht werden.\cite{EMMA}
 
 Außerdem erleichtern Microservices die horizontale Skalierung, da die inherente Trennung in einzelne Prozesse vergleichsweise einfache Duplikation der Instanzen erlaubt.
-Dieses führt gleichzeitig auch zu einer besseren Fehlertoleranz, da damit jede Komponente redundant vorhanden ist.\cite{OMA}
+Dieses führt gleichzeitig zu einer besseren Fehlertoleranz, da damit jede Komponente redundant vorhanden ist.\cite{OMA}
 
 Allerdings kommen diese Vorteile nicht ohne Kosten.
 So muss zum Beispiel während der Designphase muss entschieden werden wie die Funktionalität in Services aufgeteilt wird, welches eine große Hürde beim entwerfen von Microservices darstellt.\cite{SCASASD}
@@ -77,19 +83,19 @@ Wir wollen aufzeigen, wie das Spring-Framework diese Probleme mit wenig Aufwand 
 \subsection{Microservices mit Spring}
 
 Spring ist eine Sammlung von Frameworks zur Unterstützung der Entwicklung von verschiedensten Systemen in Java.
-Manche dieser Frameworks bieten eine eigene Funktionalität, andere helfen dabei, Technologien die nicht zu Spring gehören in das zu entwickelnde System einzubinden.
+Manche dieser Frameworks bieten eine eigene Funktionalität, andere helfen dabei Technologien, die nicht zu Spring gehören in das zu entwickelnde System einzubinden.
 Viele der Angebotenen Frameworks sind nützlich für das Entwickeln von Microservices.
 
 Im Folgenden zeigen wir anhand einer einfachen Software, umgesetzt in Microservices, dass Spring eine mächtige Abstraktion für Kommunikation über Netzwerke bereitstellt und.
 
 \section{Microservices mit Spring am Beispiel der SE2-Medienbibilothek}
 
-Wir werden im folgenden Abschnitt die Medienbibliothek aus unserer Vorlseung Softwareentwicklung 2 in eine Microservice-Architektur überführen und anhand dessen die Vorteile der Frameworks hervorheben.
+Wir werden im folgenden Abschnitt die Medienbibliothek aus unserer Vorlesung Softwareentwicklung 2 in eine Microservice-Architektur überführen und anhand dessen die Vorteile der Frameworks hervorheben.
 
 \subsection{Aufteilen in Microservices}
 
-Da die Medienbibliothek den WAM-Ansatz verfolgt ist sie bereits in weitesgehend unabhängige Services unterteilt.
-Wir können jeden davon in einen eigenen Microservice übersetzen und müssen uns (bei dieser Größenordnung) keine weiteren Gedanken um die Unterteilung machen.
+Da die Medienbibliothek den WAM-Ansatz verfolgt ist sie bereits in weitestgehend unabhängige Services unterteilt.
+Wir können jeden davon in einen eigenen Microservice übersetzen und müssen uns, bei dieser Größenordnung, keine weiteren Gedanken um die Unterteilung machen.
 
 \subsection{Spring Boot}
 
@@ -169,7 +175,7 @@ public interface CDRepo extends CrudRepository<CD, CD.CDId> {}
 \end{lstlisting}
 
 Dieses Interface deklariert eine Datenbank, welche \texttt{CD}s anhand des Schlüssels \texttt{CD.CDId} speichert.
-Sie kann wie die \texttt{JdbcTemplate} mit der \texttt{@Autowired}-Annotation automatisch in Klassen injeziert werden und stellt verschieden Grundlegende Operationen bereit.
+Sie kann wie die \texttt{JdbcTemplate} mit der \texttt{@Autowired}-Annotation automatisch in Klassen injiziert werden und stellt verschieden Grundlegende Operationen bereit.
 JPA erlaubt keine freien SQL-Queries und ist damit deutlich eingeschränkter als \texttt{JDBC}.
 
 Um die \texttt{CD}-Klasse mit \texttt{JPA} zu nutzen deklarieren wir sie mit einer\texttt{@Entity}-Annotation und versehen die Schlüsselfelder mit der \texttt{@Id}-Annotation.
@@ -321,7 +327,7 @@ Danach stellen wir über das graphische Interface den folgende Graph zusammen, w
 
 Dies gibt SCDF alle Informationen die es benötigt, um die Konfigurierung vorzunehmen und die Pipeline zu deployen.
 
-SCDF ist extrem leicht erlernbar und ermöglicht mit minimalem Aufwand das Definieren und konfigurieren von Daten-Pipelines.
+SCDF ist extrem leicht erlernbar und ermöglicht mit minimalem Aufwand das Definieren und Konfigurieren von Daten-Pipelines.
 Es erlaubt außerdem tiefere Konfigurierung des Deployments, wie zum Beispiel das Angeben der Anzahl von Instanzen, die von einem Service erstellt werden sollen, oder das zuweisen von Rechenkapazität für einzelne Services.
 
 \subsection{Spring Cloud Netflix}
@@ -371,5 +377,6 @@ Die meisten dieser Schwierigkeiten werden von Spring ohne Aufwand seitens der Pr
 Damit bietet Spring eine wichtige Grundlage für gutes Software-Engineering in der Form einer wiederverwendbaren und abstrakten Basis, mit der sich individuell gestaltete Komponenten verbinden lassen.
 
 \bibliographystyle{plain}
+\addcontentsline{toc}{section}{Literatur}
 \bibliography{bibtex_file}
 \end{document}

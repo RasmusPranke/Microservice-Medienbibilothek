@@ -353,7 +353,7 @@ Das folgende Beispiel zeigt, wie man in SCDF eine Pipeline definieren kann, die:
 \item Daten zu neuen Medien aus Dateien einliest,
 \item Diese zu Medien-Objekten konvertiert,
 \item Abschließend die Objekte im Medienbestandservice abspeichert
-\end{enumerate} 
+\end{enumerate}
 Die Ergebnisse des Konvertierens werden außerdem von einem separaten Microservice geloggt.
 Dazu registrieren wir zunächst die ausführbaren .jar Dateien der Microservices bei SCDF und geben an, ob sie eine Source, einen Processor, oder eine Sink darstellen.
 Danach stellen wir über das graphische Interface den folgende Graph zusammen, welcher die Pipeline definiert.\medskip\\
@@ -363,6 +363,44 @@ Dies gibt SCDF alle Informationen die es benötigt, um die Konfigurierung vorzun
 
 SCDF ist extrem leicht erlernbar und ermöglicht mit minimalem Aufwand das Definieren und konfigurieren von Daten-Pipelines.
 Es erlaubt außerdem tiefere Konfigurierung des Deployments, wie zum Beispiel das Angeben der Anzahl von Instanzen, die von einem Service erstellt werden sollen, sowie das zuweisen von Rechenkapazität für einzelne Services.
+
+Es erlaubt außerdem, tiefere Konfigurierung des Deployments, wie zum Beispiel das Angeben der Anzahl von Instanzen, die von einem Service erstellt werden sollen, sowie das zuweisen von Rechenkapazität für einzelne Services.
+
+\subsection{Spring Cloud Netflix}
+
+Spring Cloud Netflix enthält Unterstützung für die Netflix Open Source Software `Eureka', `Ribbon', `Zuul' und `Hystrix'.
+Diese sind dazu gedacht, Anfragen von Clients effizient an die richtigen Microservices weiterzuleiten.
+
+\subsubsection{Eureka}
+
+Eureka verwaltet eine aktuelle Liste von verfügbaren Microservices und gibt auf Anfrage Auskunft über diese.
+Die Microservices müssen sich proaktiv bei Eureka registrieren um sichtbar zu sein.
+
+Zusätzlich unterstützt Eureka simplistisches Load Balancing und erlaubt das einführen von komplexerem Load Balancing indem man einen Wrapper dafür schreibt.
+Das native Load Balancing verteilt einfach Anfragen in einer festen Reihenfolge an die Services. (Round Robin)
+
+\subsubsection{Ribbon}
+
+Ribbon bietet native Unterstützung für weitere Load Balancing-Verfahren und einfacheres definieren eigener Regeln.
+Zusätzlich unterstütz es die Fehlertoleranz des verteilten Systems indem es die Verfügbarkeit von Services prüft und darauf basierend entscheiden kann, wohin Anfragen gerichtet werden sollen.
+
+Ribbon kann direkt mit Eureka zusammenarbeiten um Services zu finden.
+
+\subsubsection{Zuul}
+
+Zuul erfüllt die Aufgaben Anfragen an Microservices entgegenzunehmen, zu filtern, und weiterzuleiten.
+Für das Entdecken der Services und Load Balancing ist es in der Lage mit Eureka und Ribbon zusammenzuarbeiten.
+
+Mit Zuul ist es unter Anderem möglich Anfragen zu Authentifizieren, fehlgeschlagene Anfragen zu wiederholen, und Datenverkehr zu Überwachen.
+Es ist die zentrale Anlaufstelle für alle Anfragen von Clients und bildet somit den Kern der Anfragenverarbeitung.
+
+\subsubsection{Hystrix}
+
+Hystrix wurde entwickelt um die negativen Auswirkungen von Latenz und Fehlschlägen von Anfragen zwischen Microservices zu vermindern.
+Es stoppt das Propagieren von Fehlschlägen, unterbricht zu lange Wartezeiten und erlaubt das Zurückfallen auf Notlösungen.
+Dabei muss die Art der Fehlerbehandlung fest vordefiniert werden und kann nicht dynamisch an die aktuelle Performance des Systems angepasst werden.\medskip
+
+Im Zusammenspiel lässt sich mit diesen Projekten der Netflix Open Source Software ein großer Teil des Bedarfs an Infrastruktur für Microservices decken.
 
 \section{Diskussion}
 

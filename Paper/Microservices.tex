@@ -200,4 +200,58 @@ Dieses Interface deklariert eine Datenbank, welche \texttt{CD}s anhand des Schl�
 Sie kann wie die \texttt{JdbcTemplate} mit der \texttt{Autowired}-Annotation automatisch in Klassen injeziert werden und stellt verschieden Grundlegende Operationen bereit.
 JPA erlaubt keine freien SQL-Queries und ist damit deutlich eingeschränkter als \texttt{JDBC}.
 
+\subsection{Spring Cloud Stream}
+
+Spring Cloud Stream (SCS) bietet Unterstützung dafür Microservices zu entwickeln, die sich über einen Messagingservice verbinden.
+Bisher unterstützt SCS dafür Apache Kafka und RabbitMQ, für unser Projekt haben wir uns für Apache Kafka entschieden.
+SCS bietet allerdings eine allgemeine Syntax, welche von dem gewählten Messagingservice unabhängig ist.
+
+Damit ein Microservice mit dem Messagingservice interagieren kann, muss ein Interface angeboten werden welches die Input- und Outputkanäle des Service definiert.
+Falls es nur jeweils maximal einen Input- und Outputkanal geben soll, reicht es die in SCS vordefinierten Interfaces \texttt{Sink}, \texttt{Source} und \texttt{Processor} zu verwenden.
+Dabei definiert \texttt{Sink} einen Inputkanal, \texttt{Source} einen Outputkanal und \texttt{Processor} erbt von beiden.
+
+Methoden, welche mit dem Messagingservice interagieren sollen, müssen ebenfalls entsprechend annotiert werden.
+Ein simpler Service der eine Nachricht erhält, anhand dessen Operationen ausführt und dann eine Nachricht zurück/weiter schickt, sähe folgendermaßen aus:
+\begin{lstlisting}
+@EnableBinding{Processor}
+public class MedienProcessor {
+    ...
+
+    @StreamListener{Processor.INPUT}
+    @SendTo{Processor.OUTPUT}
+    public Medium processMedium(Medium medium) {
+        ...
+        return medium;
+    }
+}
+\end{lstlisting}
+
+Das kodieren und dekodieren der Java-Objekte zu Nachrichten inklusive entsprechenden Headern und zurück wird dabei automatisch von dem Framework erledigt.
+
+In unserem Projekt wollen wir alle Arten von Medien über einen Kanal senden.
+Damit diese korrekt dekodiert werden können, definieren wir einen eigenen Header, welcher den Typ des gesendeten Mediums angibt, und prüfen diesen beim Erhalten einer Nachricht, um das Medium entsprechend behandeln zu können.
+Um den entsprechenden Header beim Verschicken der Nachricht setzen zu können, müssen wir die automatische Nachrichtengenerierung umgehen:
+\begin{lstlisting}
+@SendTo(Source.OUTPUT)
+public Message<?> sendeMedium(Medium medium) {
+    return MessageBuilder
+            .withPayload(medium)
+            .setHeader("type", medium.getClass().getSimpleName())
+            .build();
+}
+\end{lstlisting}
+
+Beim Empfangen der Nachrichten können wir über ein Argument der Annotation sicher stellen, dass diese anhand des Werts unseres Headers von der richtigen Methode entgegen genommen wird.
+\begin{lstlisting}
+@StreamListener(target = Sink.INPUT,
+                condition = "headers['type']=='CD'")
+public void fuegeCdEin(CD cd) {
+    ...
+}
+\end{lstlisting}
+
+Der Wert von \texttt{condition} ist ein Spring Expression Language (SpEL) Ausdruck.
+
+Nachdem die Methoden zum Senden, Empfangen, und Verarbeiten der Nachrichten also fertig sind, müssen die Verbindungen der Microservices zu Kafka oder RabbitMQ konfiguriert werden.
+In den meisten Fällen kann die manuelle Konfigurierung aber komplett umgangen werden, durch das verwenden von Spring Cloud Data Flow.
 \end{document}

@@ -157,7 +157,7 @@ Spring übernimmt die Komposition des Services und erleichtert diese damit um ei
 \subsection{Migration zu Datenbanken}
 
 Die Medienbibliothek verwendet einfache Textdateien als Datenbanken und unterstützt keine Schreiboperationen auf diese.
-Da dies in keinster Weise repräsentativ für reale Anwendungen ist, ist unser erster Schritt, echte relationale Datenbanken zu verwenden.
+Da dies in keinster Weise repräsentativ für reale Anwendungen ist benutzen wir in unserer Umsetzung stattdessen relationale Datenbanken.
 
 Spring stellt dafür eine Reihe an Frameworks unter dem Namen \texttt{Spring Data} bereit:
 \begin{itemize}
@@ -171,7 +171,7 @@ Da wir uns für eine relationale Datenbank entschieden haben sind für uns ledig
 \subsubsection{JDBC}
 
 JDBC abstrahiert die Verbindung zu einer Datenbank und stellt Methoden bereit, um via SQL auf diese zuzugreifen.
-Um via JDBC auf eine Datenbank zuzugreifen benötigt man lediglich eine \texttt{JdbcTemplate}-Deklaration mit der \texttt{Autowired}-Annotation:
+Um via JDBC auf eine Datenbank zuzugreifen deklarieren wir eine \texttt{JdbcTemplate}-Deklaration mit der \texttt{Autowired}-Annotation:
 
 \begin{lstlisting}
 public class Exampleclass {
@@ -181,7 +181,7 @@ public class Exampleclass {
 \end{lstlisting}
 
 Spring sucht sich nun anhand der vorhandenen Module sowie den Einstellungsdateien alle Informationen zur Datenbank zusammen, stellt eine Verbindung zu dieser her und stellt diese mithilfe dieser \texttt{JdbcTemplate} automatisch (dank der \texttt{Autowired}-Annotation) bereit.
-Damit reduziert sich der Aufwand, eine Datenbank zu benutzen, auf das Schreiben und Auswerten der Queries:
+Damit reduziert sich unser Aufwand, mit dieser Datenbank zu interagieren, auf das Schreiben und Auswerten der Queries:
 
 \begin{lstlisting}
 log.info("Creating tables");
@@ -196,9 +196,13 @@ jdbcTemplate.batchUpdate("INSERT INTO customers(first_name, last_name) VALUES (?
 jdbcTemplate.query("SELECT id, first_name, last_name FROM customers WHERE first_name = ?", new Object[] { "Josh" }, (rs, rowNum) -> new Customer(rs.getLong("id"), rs.getString("first_name"), rs.getString("last_name"))).forEach(customer -> log.info(customer.toString()));
 \end{lstlisting}
 
+Wir haben uns allerdings gegen JDBC entschieden, da JPA aus unserer Sicht die bessere Abstraktion darstellt.
+
 \subsubsection{JPA}
 
-JPA abstrahiert wie JDBC die Datenbankverbindung, stellt aber gleichzeitig einen Wrapper für Datenbankabfragen dar. Eine JPA-Kompatible Datenbank lässt sich in einer einzelnen Interface-Deklaration definieren:
+JPA an und für sich ist eine allgemeine Datenbank-API der Java System Library.
+Spring allerdings stellt eine automatische Implementation dieser für verschiedene Datenbanken bereit.
+Eine JPA-Kompatible Datenbank lässt sich in Spring in einer einzelnen Interface-Deklaration definieren:
 
 \begin{lstlisting}
 public interface CDRepo extends CrudRepository<CD, CD.CDId> {}
@@ -208,8 +212,8 @@ Dieses Interface deklariert eine Datenbank, welche \texttt{CD}s anhand des Schl�
 Sie kann wie die \texttt{JdbcTemplate} mit der \texttt{@Autowired}-Annotation automatisch in Klassen injeziert werden und stellt verschieden Grundlegende Operationen bereit.
 JPA erlaubt keine freien SQL-Queries und ist damit deutlich eingeschränkter als \texttt{JDBC}.
 
-Um eine Klasse mit \texttt{JPA} zu nutzen müssen wir sie allerdings zuerst vorbereiten.
-Im Falle einer einfachen Datenklasse müsste man dafür lediglich die \texttt{@Entity}-Annotation setzen und die Schlüsselfelder mit der \texttt{@Id}-Annotation versehen.
+Um die \texttt{CD}-Klasse mit \texttt{JPA} zu nutzen deklarieren wir sie mit einer\texttt{@Entity}-Annotation und versehen die Schlüsselfelder mit der \texttt{@Id}-Annotation.
+Dies würde für eine einfache Datenklasse ausreichen.
 
 In der Medienbibilothek allerdings teilen sich alle Medien die gemeinsame Elternklasse \texttt{AbstractMedium}, in welcher der Titel des Mediums deklariert wird.
 Diese Struktur machen wir mit 2 weiteren Annotations und ein wenig Schreibarbeit für die Datenbank nutzbar.
@@ -275,6 +279,10 @@ public class CD extends AbstractMedium implements Medium {
 }
 \end{lstlisting}
 
+JPA ermöglicht es, Datenbanken zu nutzen, ohne sich mit SQL auszukennen.
+Die JPA Criteria API erlaubt es auch, kompliziertere Anfragen dynamisch zu generieren.
+Durch die automatische Generierung der Datenbankverbindung durch Spring muss man sich also ausschließlich mit den Anfragen selbst beschäftigen.
+
 \subsection{Spring Cloud Stream}
 
 Spring Cloud Stream (SCSt) bietet Unterstützung dafür Microservices zu entwickeln, die sich mit einem Message Broker verbinden.
@@ -338,18 +346,23 @@ Um SCDF zu verwenden, muss Apache Kafka oder RabbitMQ auf dem System installiert
 SCDF kann als .jar heruntergeladen und ausgeführt werden und startet einen Server, der REST-Endpoints anbietet um die Vernetzung von Microservices vorzunehmen.
 
 Um mit dem Server zu interagieren bietet Spring sowohl eine Shell-Applikation als auch ein graphisches Interface im Browser an, beide vereinfachen das Aufrufen der REST-Endpoints.
-Wir haben das graphische Interface verwendet, da der Umgang damit einfacher zu erlernen ist, als mit dem Shell Interface.
+Wir haben das graphische Interface verwendet, da der Umgang damit einfacher zu erlernen ist.
 
-Das folgende Beispiel zeigt wie man in SCDF eine Pipeline definieren kann, die Daten zu neuen Medien aus Dateien einliest, diese zu Medien-Objekten konvertiert, und abschließend die Objekte an den Medienbestandservice schickt, welcher diese in der Datenbank abspeichern.
+Das folgende Beispiel zeigt, wie man in SCDF eine Pipeline definieren kann, die:
+\begin{enumerate}
+\item Daten zu neuen Medien aus Dateien einliest,
+\item Diese zu Medien-Objekten konvertiert,
+\item Abschließend die Objekte im Medienbestandservice abspeichert
+\end{enumerate} 
 Die Ergebnisse des Konvertierens werden außerdem von einem separaten Microservice geloggt.
-Dazu muss man zunächst die ausführbaren .jar Dateien der Microservices bei SCDF registrieren und angeben, ob sie eine Source, einen Processor, oder eine Sink darstellen.
-Danach lässt sich über das graphische Interface der folgende Graph zusammenstellen, welcher die Pipeline definiert.\medskip\\
+Dazu registrieren wir zunächst die ausführbaren .jar Dateien der Microservices bei SCDF und geben an, ob sie eine Source, einen Processor, oder eine Sink darstellen.
+Danach stellen wir über das graphische Interface den folgende Graph zusammen, welcher die Pipeline definiert.\medskip\\
 \includegraphics[width=\textwidth]{stream-small.png}
 
 Dies gibt SCDF alle Informationen die es benötigt, um die Konfigurierung vorzunehmen und die Pipeline zu deployen.
 
 SCDF ist extrem leicht erlernbar und ermöglicht mit minimalem Aufwand das Definieren und konfigurieren von Daten-Pipelines.
-Es erlaubt außerdem, tiefere Konfigurierung des Deployments, wie zum Beispiel das Angeben der Anzahl von Instanzen, die von einem Service erstellt werden sollen, sowie das zuweisen von Rechenkapazität für einzelne Services.
+Es erlaubt außerdem tiefere Konfigurierung des Deployments, wie zum Beispiel das Angeben der Anzahl von Instanzen, die von einem Service erstellt werden sollen, sowie das zuweisen von Rechenkapazität für einzelne Services.
 
 \section{Diskussion}
 

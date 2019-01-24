@@ -1,5 +1,6 @@
 package de.grzb.medienbestandservice.restsapi;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -12,37 +13,42 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.grzb.materialien.medien.CD;
-import de.grzb.medienbestandservice.CDRepo;
+import de.grzb.materialien.medien.Medium;
+import de.grzb.medienbestandservice.CDRepository;
 
 @RestController
 public class MediumController {
 
-    private final CDRepo repository;
+    private final CDRepository cdRepository;
     private final Log log;
 
-    public MediumController(CDRepo repository) {
-        this.repository = repository;
+    public MediumController(CDRepository repository) {
+        this.cdRepository = repository;
         log = LogFactory.getLog(getClass());
         log.info("Created Medium Controller!");
     }
 
-    @RequestMapping(name = "/medium/get", method = RequestMethod.GET)
-    public List<CD> medium_get(@RequestHeader(value = "interpret", defaultValue = "Ben Briggs") String interpret) {
-        return repository.getBy_interpret(interpret);
+    @RequestMapping(name = "getMedien", method = RequestMethod.GET)
+    public List<Medium> medium_get() {
+        List<Medium> medien = new ArrayList<Medium>();
+        cdRepository.findAll().forEach(cd -> {
+            medien.add(cd);
+        });
+        return medien;
     }
 
-    @RequestMapping(name = "/medium/set", method = RequestMethod.POST)
+    @RequestMapping(name = "fuegeMediumEin/cd", method = RequestMethod.POST)
     public ResponseEntity<CD> medium_set(@RequestHeader(value = "titel") String titel,
                                          @RequestHeader(value = "interpret") String interpret,
                                          @RequestHeader(value = "kommentar", defaultValue = "") String kommentar,
                                          @RequestHeader(value = "spiellaenge") int spieallaenge,
                                          @RequestHeader(value = "override", required = false) boolean override) {
 
-        if(!override && repository.findById(new CD.CDId(titel, interpret)).isPresent()) {
+        if(!override && cdRepository.findById(new CD.CDId(titel, interpret)).isPresent()) {
             return new ResponseEntity<CD>(HttpStatus.CONFLICT);
         }
 
-        CD result = repository.save(new CD(titel, kommentar, interpret, spieallaenge));
+        CD result = cdRepository.save(new CD(titel, kommentar, interpret, spieallaenge));
         return new ResponseEntity<CD>(result, HttpStatus.OK);
     }
 }

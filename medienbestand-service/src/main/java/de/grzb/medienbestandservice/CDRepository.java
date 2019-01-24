@@ -6,7 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import de.grzb.materialien.medien.CD;
 
-public interface CDRepo extends CrudRepository<CD, CD.CDId> {
+public interface CDRepository extends CrudRepository<CD, CD.CDId> {
 
     List<CD> getBy_interpret(String _interpret);
 

@@ -1,17 +1,16 @@
 package de.grzb.medienbestandservice.dataflow;
 
-import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 
 import de.grzb.materialien.medien.CD;
-import de.grzb.medienbestandservice.CDRepo;
+import de.grzb.medienbestandservice.CDRepository;
 
-@EnableBinding(MedienSink.class)
+//@EnableBinding(MedienSink.class)
 public class MedienFlow {
 
-    private final CDRepo repository;
+    private final CDRepository repository;
 
-    public MedienFlow(CDRepo repository) {
+    public MedienFlow(CDRepository repository) {
         this.repository = repository;
     }
 

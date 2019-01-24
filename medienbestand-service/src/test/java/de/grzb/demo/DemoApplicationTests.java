@@ -1,4 +1,4 @@
-package com.example.demo;
+package de.grzb.demo;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -1,0 +1,19 @@
+\BOOKMARK [1][-]{section.1}{Motivation}{}% 1
+\BOOKMARK [1][-]{section.2}{Microservices}{}% 2
+\BOOKMARK [1][-]{section.3}{Die Spring-Frameworks}{}% 3
+\BOOKMARK [1][-]{section.4}{Microservices mit Spring am Beispiel der SE2-Medienbibilothek}{}% 4
+\BOOKMARK [2][-]{subsection.4.1}{Aufteilen in Microservices}{section.4}% 5
+\BOOKMARK [2][-]{subsection.4.2}{Spring Boot}{section.4}% 6
+\BOOKMARK [2][-]{subsection.4.3}{Migration zu Datenbanken}{section.4}% 7
+\BOOKMARK [3][-]{subsubsection.4.3.1}{JDBC}{subsection.4.3}% 8
+\BOOKMARK [3][-]{subsubsection.4.3.2}{JPA}{subsection.4.3}% 9
+\BOOKMARK [2][-]{subsection.4.4}{Spring Cloud Stream}{section.4}% 10
+\BOOKMARK [2][-]{subsection.4.5}{Spring Cloud Data Flow}{section.4}% 11
+\BOOKMARK [2][-]{subsection.4.6}{Spring Cloud Netflix}{section.4}% 12
+\BOOKMARK [3][-]{subsubsection.4.6.1}{Eureka}{subsection.4.6}% 13
+\BOOKMARK [3][-]{subsubsection.4.6.2}{Ribbon}{subsection.4.6}% 14
+\BOOKMARK [3][-]{subsubsection.4.6.3}{Zuul}{subsection.4.6}% 15
+\BOOKMARK [3][-]{subsubsection.4.6.4}{Hystrix}{subsection.4.6}% 16
+\BOOKMARK [1][-]{section.5}{Vor- und Nachteile von Spring}{}% 17
+\BOOKMARK [1][-]{section.6}{Fazit}{}% 18
+\BOOKMARK [1][-]{section.6}{Literatur}{}% 19

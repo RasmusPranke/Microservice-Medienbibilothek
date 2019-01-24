@@ -1,0 +1,20 @@
+\select@language {ngerman}
+\contentsline {section}{\numberline {1}Motivation}{3}{section.1}
+\contentsline {section}{\numberline {2}Microservices}{3}{section.2}
+\contentsline {section}{\numberline {3}Die Spring-Frameworks}{3}{section.3}
+\contentsline {section}{\numberline {4}Microservices mit Spring am Beispiel der SE2-Medienbibilothek}{4}{section.4}
+\contentsline {subsection}{\numberline {4.1}Aufteilen in Microservices}{4}{subsection.4.1}
+\contentsline {subsection}{\numberline {4.2}Spring Boot}{4}{subsection.4.2}
+\contentsline {subsection}{\numberline {4.3}Migration zu Datenbanken}{4}{subsection.4.3}
+\contentsline {subsubsection}{\numberline {4.3.1}JDBC}{5}{subsubsection.4.3.1}
+\contentsline {subsubsection}{\numberline {4.3.2}JPA}{6}{subsubsection.4.3.2}
+\contentsline {subsection}{\numberline {4.4}Spring Cloud Stream}{7}{subsection.4.4}
+\contentsline {subsection}{\numberline {4.5}Spring Cloud Data Flow}{8}{subsection.4.5}
+\contentsline {subsection}{\numberline {4.6}Spring Cloud Netflix}{9}{subsection.4.6}
+\contentsline {subsubsection}{\numberline {4.6.1}Eureka}{9}{subsubsection.4.6.1}
+\contentsline {subsubsection}{\numberline {4.6.2}Ribbon}{10}{subsubsection.4.6.2}
+\contentsline {subsubsection}{\numberline {4.6.3}Zuul}{10}{subsubsection.4.6.3}
+\contentsline {subsubsection}{\numberline {4.6.4}Hystrix}{10}{subsubsection.4.6.4}
+\contentsline {section}{\numberline {5}Vor- und Nachteile von Spring}{10}{section.5}
+\contentsline {section}{\numberline {6}Fazit}{10}{section.6}
+\contentsline {section}{Literatur}{11}{section.6}

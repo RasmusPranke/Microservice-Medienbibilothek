@@ -44,7 +44,7 @@
 \maketitle
 
 \begin{abstract}
-Die Microservice-Architektur ist eine neue Entwicklung im Bereich Software-Engineering, die eine einfachere Entwicklung und Skalierung von komplexen Softwaresystemen verspricht.
+Die Microservice-Architektur ist eine neue Entwicklung im Bereich Software-Engineering, die eine einfachere Entwicklung und Skalierung von komplexen Softwaresystemen ermöglicht.
 Das Spring-Framework verspricht, (unter anderem) diese Art von Architektur stark zu vereinfachen und innerhalb kurzer Zeit auch komplizierte Systeme lauffähig zu machen.
 In diesem Paper übertragen wir eine sehr einfache monolithische Software mit Spring in eine Microservice-Architektur und betrachten dabei, inwiefern Spring uns dabei unterstützt.
 Dank der durch Spring bereitgestellten Technologien gelingt uns dieses trotz fehlender Vorkenntnisse in einem sehr kurzen Zeitrahmen.
@@ -56,14 +56,12 @@ Dank der durch Spring bereitgestellten Technologien gelingt uns dieses trotz feh
 
 \pagebreak
 
-\section{Einleitung}
+\section{Motivation}
 
-\subsection{Was sind Microservices?}
+\section{Microservices}
 
 Microservices sind ein relativ neuer Ansatz der Softwarearchitektur, bei dem Software in viele kleine, unabhängige Prozesse aufgespalten wird.
 Jeder dieser übernimmt einen kleinen Anteil der Gesamtfunktionalität und kommuniziert mit anderen Services, um diesen zu Erfüllen.\cite{OMA}
-
-\subsection{Vor- und Nachteile von Microservices}
 
 Microservices glänzen vor allem durch eine bedeutend stärkere Kapselung als es bei monolithischer Software normalerweise der Fall ist.
 Durch die Trennung in verschiedene Prozesse können die Umgebungen der einzelnen Services auf ihren jeweiligen Aufgabenbereich angepasst werden.
@@ -80,7 +78,7 @@ Insbesondere sind Microservices aber verteilte Systeme, welche in der Praxis aus
 Dazu zählt unter anderem, dass die Vernetzung von Systemen viel Aufwand in der Form von Kommunikationsprotokollen und Aufbau von Verbindungen benötigt.
 Wir wollen aufzeigen, wie das Spring-Framework diese Probleme mit wenig Aufwand löst.
 
-\subsection{Microservices mit Spring}
+\section{Die Spring-Frameworks}
 
 Spring ist eine Sammlung von Frameworks zur Unterstützung der Entwicklung von verschiedensten Systemen in Java.
 Manche dieser Frameworks bieten eine eigene Funktionalität, andere helfen dabei Technologien, die nicht zu Spring gehören in das zu entwickelnde System einzubinden.
@@ -166,17 +164,25 @@ Wir haben uns allerdings gegen JDBC entschieden, da JPA aus unserer Sicht die be
 
 \subsubsection{JPA}
 
-JPA an und für sich ist eine allgemeine Datenbank-API der Java System Library.
-Spring allerdings stellt eine automatische Implementation dieser für verschiedene Datenbanken bereit.
-Eine JPA-Kompatible Datenbank lässt sich in Spring in einer einzelnen Interface-Deklaration definieren:
+JPA an und für sich ist eine allgemeine Datenbank-Library der Java System Library.
+Sie stellt die sogennante Criteria API bereit, mit welcher man komplexe Datenbankabfragen dynamisch und typsicher generieren kann.
+In Spring lässt sich eine JPA-Kompatible Datenbank in einer einzelnen Interface-Deklaration definieren:
 
 \begin{lstlisting}
 public interface CDRepo extends CrudRepository<CD, CD.CDId> {}
 \end{lstlisting}
 
 Dieses Interface deklariert eine Datenbank, welche \texttt{CD}s anhand des Schlüssels \texttt{CD.CDId} speichert.
-Sie kann wie die \texttt{JdbcTemplate} mit der \texttt{@Autowired}-Annotation automatisch in Klassen injiziert werden und stellt verschieden Grundlegende Operationen bereit.
-JPA erlaubt keine freien SQL-Queries und ist damit deutlich eingeschränkter als \texttt{JDBC}.
+Sie kann wie die \texttt{JdbcTemplate} mit der \texttt{@Autowired}-Annotation automatisch in Klassen injiziert werden.
+Dieses Interface wird abhängig von den Einstellungen und importierten Module automatisch mit einer bestehenden Datenbank vernetzt, wobei auch das Datenbankschema automatisch erstellt werden kann.
+
+In unserem Beispiel verwenden wir eine lokal gehostete SQL-Datenbank, die wir durch folgende Einstellungen in der Datei \texttt{application.properties} Spring zugänglich machen:
+
+\begin{lstlisting}
+spring.datasource.url=jdbc:mysql://localhost:3306/Medienbestand 
+spring.datasource.username= // Omitted
+spring.datasource.password= // Omitted
+\end{lstlisting}
 
 Um die \texttt{CD}-Klasse mit \texttt{JPA} zu nutzen deklarieren wir sie mit einer\texttt{@Entity}-Annotation und versehen die Schlüsselfelder mit der \texttt{@Id}-Annotation.
 Dies würde für eine einfache Datenklasse ausreichen.
@@ -244,10 +250,6 @@ public class CD extends AbstractMedium implements Medium {
     // Methoden gekuerzt, da unveraendert
 }
 \end{lstlisting}
-
-JPA ermöglicht es, Datenbanken zu nutzen, ohne sich mit SQL auszukennen.
-Die JPA Criteria API erlaubt es auch, kompliziertere Anfragen dynamisch zu generieren.
-Durch die automatische Generierung der Datenbankverbindung durch Spring muss man sich also ausschließlich mit den Anfragen selbst beschäftigen.
 
 \subsection{Spring Cloud Stream}
 
@@ -327,9 +329,6 @@ Danach stellen wir über das graphische Interface den folgende Graph zusammen, w
 
 Dies gibt SCDF alle Informationen die es benötigt, um die Konfigurierung vorzunehmen und die Pipeline zu deployen.
 
-SCDF ist extrem leicht erlernbar und ermöglicht mit minimalem Aufwand das Definieren und Konfigurieren von Daten-Pipelines.
-Es erlaubt außerdem tiefere Konfigurierung des Deployments, wie zum Beispiel das Angeben der Anzahl von Instanzen, die von einem Service erstellt werden sollen, oder das zuweisen von Rechenkapazität für einzelne Services.
-
 \subsection{Spring Cloud Netflix}
 
 Spring Cloud Netflix enthält Unterstützung für die Netflix Open Source Software `Eureka', `Ribbon', `Zuul' und `Hystrix'.
@@ -366,7 +365,15 @@ Dabei muss die Art der Fehlerbehandlung fest vordefiniert werden und kann nicht 
 
 Im Zusammenspiel lässt sich mit diesen Projekten der Netflix Open Source Software ein großer Teil des Bedarfs an Infrastruktur für Microservices decken.
 
-\section{Diskussion}
+\section{Vor- und Nachteile von Spring}
+
+JPA ermöglicht es, Datenbanken zu nutzen, ohne sich mit SQL auszukennen.
+Durch die automatische Generierung der Datenbankverbindung durch Spring muss man sich also ausschließlich mit den Anfragen selbst beschäftigen.
+
+SCDF ist extrem leicht erlernbar und ermöglicht mit minimalem Aufwand das Definieren und Konfigurieren von Daten-Pipelines.
+Es erlaubt außerdem tiefere Konfigurierung des Deployments, wie zum Beispiel das Angeben der Anzahl von Instanzen, die von einem Service erstellt werden sollen, oder das zuweisen von Rechenkapazität für einzelne Services.
+
+\section{Fazit}
 
 Spring hat es uns ermöglicht, ohne Vorerfahrung innerhalb weniger Tage eine Microservice-Architektur umzusetzen.
 Die obigen Beispiele illustrieren deutlich, wie Spring ermöglicht, sich voll und ganz auf die Implementation der Funktionalität der Microservices zu fokussieren.

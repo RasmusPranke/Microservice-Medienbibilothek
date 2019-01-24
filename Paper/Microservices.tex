@@ -110,13 +110,10 @@ public class MedienbestandServiceApplication {
 }
 \end{lstlisting}
 
-Die \texttt{@SpringBootApplication}-Annotation markiert die Klasse als mit Spring Boot ausführbar, wodurch sie mit \texttt{SpringApplication.run} ausgeführt werden kann.
+Wir markieren die Klasse mit der \texttt{@SpringBootApplication}-Annotation als mit Spring Boot ausführbar, wodurch sie mit \texttt{SpringApplication.run} ausgeführt werden kann.
 
 Spring durchsucht daraufhin das aktuelle Paket sowie alle Sub-Pakete nach bestimmten Annotationen, welche andere Klassen als Module der Anwendung deklarieren.
 Einige davon werden in den folgenden Sektionen angesprochen.
-
-Hier zeigt sich auch eine der größten Stärken von Spring: Wir müssen uns nicht damit auseinandersetzen, wie unser Code geladen wird.
-Spring übernimmt die Komposition des Services und erleichtert diese damit um ein Vielfaches.
 
 \subsection{Migration zu Datenbanken}
 

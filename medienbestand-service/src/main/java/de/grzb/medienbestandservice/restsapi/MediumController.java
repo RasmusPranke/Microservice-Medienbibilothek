@@ -54,11 +54,4 @@ public class MediumController {
         CD result = cdRepository.save(new CD(titel, kommentar, interpret, spieallaenge));
         return new ResponseEntity<CD>(result, HttpStatus.OK);
     }
-
-    // TODO: Remove this testing method
-    @RequestMapping("/service-instances/{applicationName}")
-    public List<ServiceInstance> serviceInstancesByApplicationName(
-            @PathVariable String applicationName) {
-        return this.discoveryClient.getInstances(applicationName);
-    }
 }

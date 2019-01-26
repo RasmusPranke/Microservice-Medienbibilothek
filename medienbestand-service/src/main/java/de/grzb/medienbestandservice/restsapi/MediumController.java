@@ -5,12 +5,12 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.cloud.client.*;
+import org.springframework.cloud.client.discovery.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import de.grzb.materialien.medien.CD;
 import de.grzb.materialien.medien.Medium;
@@ -21,6 +21,9 @@ public class MediumController {
 
     private final CDRepository cdRepository;
     private final Log log;
+
+    @Autowired
+    private DiscoveryClient discoveryClient;
 
     public MediumController(CDRepository repository) {
         this.cdRepository = repository;
@@ -50,5 +53,12 @@ public class MediumController {
 
         CD result = cdRepository.save(new CD(titel, kommentar, interpret, spieallaenge));
         return new ResponseEntity<CD>(result, HttpStatus.OK);
+    }
+
+    // TODO: Remove this testing method
+    @RequestMapping("/service-instances/{applicationName}")
+    public List<ServiceInstance> serviceInstancesByApplicationName(
+            @PathVariable String applicationName) {
+        return this.discoveryClient.getInstances(applicationName);
     }
 }

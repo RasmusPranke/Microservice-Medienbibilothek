@@ -32,6 +32,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.apache.kafka:kafka-streams'
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 	implementation 'org.springframework.cloud:spring-cloud-stream'
 	implementation 'org.springframework.cloud:spring-cloud-stream-binder-kafka'
 	implementation 'org.springframework.cloud:spring-cloud-stream-binder-kafka-streams'
@@ -40,6 +41,7 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.cloud:spring-cloud-stream-test-support'
 	testImplementation 'org.springframework.kafka:spring-kafka-test'
+	compile("com.h2database:h2")
     compile("org.springframework.boot:spring-boot-starter-data-jpa")
     compile("junit:junit")
 }

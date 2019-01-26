@@ -1,5 +1,7 @@
 package de.grzb.materialien.medien;
 
+import javax.persistence.Entity;
+
 /**
  * TODO für Blatt 3: löschen
  * 
@@ -10,15 +12,18 @@ package de.grzb.materialien.medien;
  * @author SE2-Team
  * @version SoSe 2014
  */
-public class KonsolenVideospiel extends AbstractVideospiel implements Medium
-{
+@Entity
+public class KonsolenVideospiel extends AbstractVideospiel implements Medium {
 
     /**
      * Initialisiert ein neues KonsolenVideospiel.
      * 
-     * @param titel Der Titel des Spiels
-     * @param kommentar Ein Kommentar zum Spiel
-     * @param system Die Bezeichnung des System
+     * @param titel
+     *            Der Titel des Spiels
+     * @param kommentar
+     *            Ein Kommentar zum Spiel
+     * @param system
+     *            Die Bezeichnung des System
      * 
      * @require titel != null
      * @require kommentar != null
@@ -28,26 +33,26 @@ public class KonsolenVideospiel extends AbstractVideospiel implements Medium
      * @ensure getKommentar() == kommentar
      * @ensure getSystem() == system
      */
-    public KonsolenVideospiel(String titel, String kommentar, String system)
-    {
+    public KonsolenVideospiel(String titel, String kommentar, String system) {
         super(titel, kommentar, system);
     }
 
+    protected KonsolenVideospiel() {
+        super();
+    }
+
     @Override
-    public String getMedienBezeichnung()
-    {
+    public String getMedienBezeichnung() {
         return "KonsolenVideospiel";
     }
 
     @Override
-    protected int getPreisNachTagen(int tage)
-    {
+    protected int getPreisNachTagen(int tage) {
         return (int) (Math.floor(tage / 3.0) * 700);
     }
 
     @Override
-    public String toString()
-    {
-        return getFormatiertenString();
+    public String toString() {
+        return toFormatiertenString();
     }
 }

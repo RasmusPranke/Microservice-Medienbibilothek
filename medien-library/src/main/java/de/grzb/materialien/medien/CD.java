@@ -1,10 +1,7 @@
 package de.grzb.materialien.medien;
 
-import java.io.Serializable;
-
 import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
+import javax.validation.constraints.NotNull;
 
 /**
  * TODO für Blatt 1: CDBlatt1 verwenden
@@ -17,61 +14,18 @@ import javax.persistence.IdClass;
  * @version SoSe 2014
  */
 @Entity
-@IdClass(value = CD.CDId.class)
 public class CD extends AbstractMedium implements Medium {
-    public static class CDId implements Serializable {
-        /**
-         * 
-         */
-        private static final long serialVersionUID = 5160712423311301732L;
-        private String _interpret;
-        private String _titel;
-
-        public CDId(String _titel, String _interpret) {
-            super();
-            this._interpret = _interpret;
-            this._titel = _titel;
-        }
-
-        public CDId() {
-        }
-
-        @Override
-        public int hashCode() {
-            final int prime = 31;
-            int result = 1;
-            result = prime * result + ((_interpret == null) ? 0 : _interpret.hashCode());
-            result = prime * result + ((_titel == null) ? 0 : _titel.hashCode());
-            return result;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if(this == obj) return true;
-            if(obj == null) return false;
-            if(getClass() != obj.getClass()) return false;
-            CDId other = (CDId) obj;
-            if(_interpret == null) {
-                if(other._interpret != null) return false;
-            }
-            else if(!_interpret.equals(other._interpret)) return false;
-            if(_titel == null) {
-                if(other._titel != null) return false;
-            }
-            else if(!_titel.equals(other._titel)) return false;
-            return true;
-        }
-    }
 
     /**
      * Der Interpret der CD
      */
-    @Id
+    @NotNull
     private String _interpret;
 
     /**
      * Die Spiellänge der CD in Minuten
      */
+    @NotNull
     private int _spiellaenge;
 
     /**
@@ -108,8 +62,8 @@ public class CD extends AbstractMedium implements Medium {
     }
 
     @Override
-    public String getFormatiertenString() {
-        return super.getFormatiertenString() + SPACE + "Interpret: " + _interpret + "\n" + SPACE + "Spiellänge: "
+    public String toFormatiertenString() {
+        return super.toFormatiertenString() + SPACE + "Interpret: " + _interpret + "\n" + SPACE + "Spiellänge: "
                 + _spiellaenge + "\n";
     }
 
@@ -170,6 +124,6 @@ public class CD extends AbstractMedium implements Medium {
 
     @Override
     public String toString() {
-        return getFormatiertenString();
+        return toFormatiertenString();
     }
 }

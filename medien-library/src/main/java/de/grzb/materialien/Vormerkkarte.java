@@ -145,7 +145,7 @@ public class Vormerkkarte
     public String getFormatiertenString()
     {
         StringBuilder builder = new StringBuilder();
-        builder.append(_medium.getFormatiertenString() + " vorgemerkt von:\n");
+        builder.append(_medium.toFormatiertenString() + " vorgemerkt von:\n");
         for (Kunde k : _vormerker)
         {
             builder.append(k.getFormatiertenString());

@@ -10,15 +10,15 @@ import de.grzb.fachwerte.Geldbetrag;
  * @author SE2-Team
  * @version SoSe 2014
  */
-public interface Medium
-{
+public interface Medium {
 
     /**
      * TODO für Blatt 4: löschen
      * 
      * Berechnet die Mietgebühr in Eurofür eine angegebene Mietdauer in Tagen
      * 
-     * @param mietTage Die Anzahl der Ausleihtage eines Mediums
+     * @param mietTage
+     *            Die Anzahl der Ausleihtage eines Mediums
      * @return Die Mietgebühr in Euro als Geldbetrag
      * 
      * @require mietTage > 0
@@ -39,7 +39,7 @@ public interface Medium
      * 
      * @ensure result != null
      */
-    String getFormatiertenString();
+    String toFormatiertenString();
 
     /**
      * Gibt den Kommentar zu diesem Medium zurück.
@@ -55,7 +55,8 @@ public interface Medium
      * 
      * Ändert den Kommentar des Mediums
      * 
-     * @param kommentar Ein Kommentar zu diesem Medium
+     * @param kommentar
+     *            Ein Kommentar zu diesem Medium
      * 
      * @require kommentar != null
      * @ensure getKommentar() == kommentar
@@ -85,11 +86,21 @@ public interface Medium
      * 
      * Ändert den Titel des Mediums.
      * 
-     * @param titel Der Titel des Mediums
+     * @param titel
+     *            Der Titel des Mediums
      * 
      * @require titel != null
      * @ensure getTitel() == titel
      */
     public void setTitel(String titel);
+
+    /**
+     * Returns the ID of the Medium.
+     * 
+     * @return
+     */
+    public long getId();
+
+    public void setId(long id);
 
 }

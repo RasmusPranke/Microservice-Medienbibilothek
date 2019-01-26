@@ -1,4 +1,4 @@
-package de.grzb.medienbestandservice.restsapi;
+package de.grzb.medienbestandservice.restsapi.mediacontroller;
 
 import java.util.List;
 
@@ -11,42 +11,47 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.grzb.materialien.medien.CD;
+import de.grzb.materialien.medien.KonsolenVideospiel;
+import de.grzb.medienbestandservice.restsapi.AbstractMediumController;
+import de.grzb.medienbestandservice.restsapi.MedienController;
 
 @RestController
-public class CdController extends AbstractMediumController<CD> {
+public class KonsolenVideospielController extends AbstractMediumController<KonsolenVideospiel> {
 
-    private static final String MEDIENBEZEICHNUNG = "CD";
+    private static final String MEDIENBEZEICHNUNG = "KonsolenVideospiel";
 
-    protected CdController(CrudRepository<CD, Long> repo, MedienController controller) {
+    public static interface Repository extends CrudRepository<KonsolenVideospiel, Long> {
+    }
+
+    protected KonsolenVideospielController(Repository repo, MedienController controller) {
         super(repo, controller);
     }
 
     @Override
     @RequestMapping(path = "/fuegeMediumEin", method = RequestMethod.POST, headers = {
             "medienBezeichnung=" + MEDIENBEZEICHNUNG })
-    public ResponseEntity<CD> medium_set(@RequestBody @Valid CD cd) {
+    public ResponseEntity<KonsolenVideospiel> medium_set(@RequestBody @Valid KonsolenVideospiel cd) {
         return fuegeMediumEin(cd);
     }
 
     @Override
     @RequestMapping(path = "/getMedien", method = RequestMethod.GET, headers = {
             "medienBezeichnung=" + MEDIENBEZEICHNUNG })
-    public List<CD> medium_get() {
+    public List<KonsolenVideospiel> medium_get() {
         return getMedien();
     }
 
     @Override
     @RequestMapping(path = "/enthaeltMedium", method = RequestMethod.GET, headers = {
             "medienBezeichnung=" + MEDIENBEZEICHNUNG })
-    public ResponseEntity<CD> medium_has(@RequestBody @Valid CD cd) {
+    public ResponseEntity<KonsolenVideospiel> medium_has(@RequestBody @Valid KonsolenVideospiel cd) {
         return enthaeltMedium(cd);
     }
 
     @Override
     @RequestMapping(path = "/entferneMedium", method = RequestMethod.POST, headers = {
             "medienBezeichnung=" + MEDIENBEZEICHNUNG })
-    public ResponseEntity<CD> medium_remove(@RequestBody @Valid CD cd) {
+    public ResponseEntity<KonsolenVideospiel> medium_remove(@RequestBody @Valid KonsolenVideospiel cd) {
         return entferneMedium(cd);
     }
 

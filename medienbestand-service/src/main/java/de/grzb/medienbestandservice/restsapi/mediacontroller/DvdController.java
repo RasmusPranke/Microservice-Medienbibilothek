@@ -1,4 +1,4 @@
-package de.grzb.medienbestandservice.restsapi;
+package de.grzb.medienbestandservice.restsapi.mediacontroller;
 
 import java.util.List;
 
@@ -12,13 +12,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.grzb.materialien.medien.DVD;
+import de.grzb.medienbestandservice.restsapi.AbstractMediumController;
+import de.grzb.medienbestandservice.restsapi.MedienController;
 
 @RestController
 public class DvdController extends AbstractMediumController<DVD> {
 
     private static final String MEDIENBEZEICHNUNG = "DVD";
 
-    protected DvdController(CrudRepository<DVD, Long> repo, MedienController controller) {
+    public static interface Repository extends CrudRepository<DVD, Long> {
+    }
+
+    protected DvdController(Repository repo, MedienController controller) {
         super(repo, controller);
     }
 

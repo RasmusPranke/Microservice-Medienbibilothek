@@ -8,6 +8,7 @@ import javax.validation.Valid;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +16,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import de.grzb.materialien.medien.Medium;
 
+@EnableJpaRepositories(considerNestedRepositories = true)
 public abstract class AbstractMediumController<K extends Medium> implements IMediumController<K> {
 
     private final CrudRepository<K, Long> repo;
-    private final Log log;
+    protected final Log log;
 
     protected AbstractMediumController(CrudRepository<K, Long> repo, MedienController controller) {
         this.repo = repo;

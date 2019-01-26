@@ -1,5 +1,7 @@
 package de.grzb.materialien.medien;
 
+import javax.persistence.MappedSuperclass;
+
 import de.grzb.fachwerte.Geldbetrag;
 
 /**
@@ -8,8 +10,8 @@ import de.grzb.fachwerte.Geldbetrag;
  * @author SE2-Team
  * @version SoSe 2014
  */
-abstract class AbstractVideospiel extends AbstractMedium
-{
+@MappedSuperclass
+abstract class AbstractVideospiel extends AbstractMedium {
     /**
      * Basispreis eines Videospiels in Cent
      */
@@ -23,9 +25,12 @@ abstract class AbstractVideospiel extends AbstractMedium
     /**
      * Initialisiert ein neues Videospiel.
      * 
-     * @param titel Der Titel des Spiels
-     * @param system Die Bezeichnung des System
-     * @param kommentar Ein Kommentar zum Spiel
+     * @param titel
+     *            Der Titel des Spiels
+     * @param system
+     *            Die Bezeichnung des System
+     * @param kommentar
+     *            Ein Kommentar zum Spiel
      * 
      * @require titel != null
      * @require kommentar != null
@@ -35,25 +40,25 @@ abstract class AbstractVideospiel extends AbstractMedium
      * @ensure getKommentar() == kommentar
      * @ensure getSystem() == system
      */
-    public AbstractVideospiel(String titel, String kommentar, String system)
-    {
+    public AbstractVideospiel(String titel, String kommentar, String system) {
         super(titel, kommentar);
 
         assert system != null : "Vorbedingung verletzt: system != null";
         _system = system;
     }
 
+    protected AbstractVideospiel() {
+        super();
+    }
+
     @Override
-    public Geldbetrag berechneMietgebuehr(int mietTage)
-    {
+    public Geldbetrag berechneMietgebuehr(int mietTage) {
         return new Geldbetrag(BASISPREIS + getPreisNachTagen(mietTage));
     }
 
     @Override
-    public String toFormatiertenString()
-    {
-        return super.toFormatiertenString() + SPACE + "System: " + getSystem()
-                + "\n";
+    public String toFormatiertenString() {
+        return super.toFormatiertenString() + SPACE + "System: " + getSystem() + "\n";
     }
 
     /**
@@ -63,8 +68,7 @@ abstract class AbstractVideospiel extends AbstractMedium
      * 
      * @ensure result != null
      */
-    public String getSystem()
-    {
+    public String getSystem() {
         assert _system != null : "Nachbedingung verletzt: result != null";
         return _system;
     }
@@ -72,13 +76,13 @@ abstract class AbstractVideospiel extends AbstractMedium
     /**
      * Ändert das System
      * 
-     * @param system Das System des Videospiels
+     * @param system
+     *            Das System des Videospiels
      * 
      * @require system != null
      * @ensure getSystem() == system
      */
-    public void setSystem(String system)
-    {
+    public void setSystem(String system) {
         assert system != null : "Vorbedingung verletzt: system != null";
         _system = system;
     }
@@ -86,7 +90,8 @@ abstract class AbstractVideospiel extends AbstractMedium
     /**
      * Berechnet den Preis für ein Videospiel mit einer Verleihdauer von tage.
      * 
-     * @param tage Verleihdauer des Videospiels in Tagen.
+     * @param tage
+     *            Verleihdauer des Videospiels in Tagen.
      */
     protected abstract int getPreisNachTagen(int tage);
 

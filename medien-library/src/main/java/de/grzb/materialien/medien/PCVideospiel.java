@@ -1,5 +1,7 @@
 package de.grzb.materialien.medien;
 
+import javax.persistence.Entity;
+
 /**
  * TODO für Blatt 3: löschen
  * 
@@ -10,14 +12,17 @@ package de.grzb.materialien.medien;
  * @author SE2-Team
  * @version SoSe 2014
  */
-public class PCVideospiel extends AbstractVideospiel implements Medium
-{
+@Entity
+public class PCVideospiel extends AbstractVideospiel implements Medium {
     /**
      * Konstruktor. Initialisiert ein neues Exemplar von PCVideospiel.
      * 
-     * @param titel Der Titel des Videospiels
-     * @param kommentar Ein Kommentar zum Videospiel
-     * @param system Das System, auf dem das Spiel lauffähig ist
+     * @param titel
+     *            Der Titel des Videospiels
+     * @param kommentar
+     *            Ein Kommentar zum Videospiel
+     * @param system
+     *            Das System, auf dem das Spiel lauffähig ist
      * 
      * @require titel != null
      * @require kommentar != null
@@ -27,27 +32,27 @@ public class PCVideospiel extends AbstractVideospiel implements Medium
      * @ensure getKommentar() == kommentar
      * @ensure getSystem() == system
      */
-    public PCVideospiel(String titel, String kommentar, String system)
-    {
+    public PCVideospiel(String titel, String kommentar, String system) {
         super(titel, kommentar, system);
     }
 
     @Override
-    public String getMedienBezeichnung()
-    {
+    public String getMedienBezeichnung() {
         return "PCVideospiel";
     }
 
+    protected PCVideospiel() {
+        super();
+    }
+
     @Override
-    protected int getPreisNachTagen(int tage)
-    {
+    protected int getPreisNachTagen(int tage) {
         int kostenpflichtigeTage = Math.max(0, tage - 7);
         return (int) (Math.ceil(kostenpflichtigeTage / 5.0) * 500);
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return toFormatiertenString();
     }
 }

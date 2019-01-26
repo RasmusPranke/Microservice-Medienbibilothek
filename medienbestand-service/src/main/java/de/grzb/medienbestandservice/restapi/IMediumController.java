@@ -1,4 +1,4 @@
-package de.grzb.medienbestandservice.restsapi;
+package de.grzb.medienbestandservice.restapi;
 
 import java.util.List;
 

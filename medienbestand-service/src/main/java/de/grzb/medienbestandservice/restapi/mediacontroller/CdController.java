@@ -1,4 +1,4 @@
-package de.grzb.medienbestandservice.restsapi.mediacontroller;
+package de.grzb.medienbestandservice.restapi.mediacontroller;
 
 import java.util.List;
 
@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.grzb.materialien.medien.CD;
-import de.grzb.medienbestandservice.restsapi.AbstractMediumController;
-import de.grzb.medienbestandservice.restsapi.MedienController;
+import de.grzb.medienbestandservice.restapi.AbstractMediumController;
+import de.grzb.medienbestandservice.restapi.MedienController;
 
 @RestController
 public class CdController extends AbstractMediumController<CD> {

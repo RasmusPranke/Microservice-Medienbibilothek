@@ -9,5 +9,6 @@
 
 rootProject.name = 'microservice-medienbibliothek'
 include ':medienbestand-service'
+include ':verleih-service'
 include ':medien-library'
 include ':eureka-server'

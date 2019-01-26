@@ -1,6 +1,7 @@
 package de.grzb.materialien.medien;
 
 import javax.persistence.Entity;
+import javax.validation.constraints.NotNull;
 
 /**
  * Eine DVD ist ein Medium. Zusätzlich zu den Eigenschaften eines Mediums
@@ -15,11 +16,13 @@ public class DVD extends AbstractMedium implements Medium {
     /**
      * Die Laufzeit des Hauptteils der DVD (in Minuten).
      */
+    @NotNull
     private int _laufzeit;
 
     /**
      * Der Regisseur des Inhalts der DVD.
      */
+    @NotNull
     private String _regisseur;
 
     /**

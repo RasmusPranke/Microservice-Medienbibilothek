@@ -4,6 +4,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.validation.constraints.NotNull;
 
 import de.grzb.fachwerte.Geldbetrag;
 
@@ -39,6 +40,7 @@ public class AbstractMedium implements Medium {
      * Der Titel des Mediums
      * 
      */
+    @NotNull
     private String _titel;
 
     /**

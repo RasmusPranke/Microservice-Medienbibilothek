@@ -1,6 +1,7 @@
 package de.grzb.materialien.medien;
 
 import javax.persistence.MappedSuperclass;
+import javax.validation.constraints.NotNull;
 
 import de.grzb.fachwerte.Geldbetrag;
 
@@ -20,6 +21,7 @@ abstract class AbstractVideospiel extends AbstractMedium {
     /**
      * Das System, auf dem das Spiel lauffähig ist
      */
+    @NotNull
     private String _system;
 
     /**

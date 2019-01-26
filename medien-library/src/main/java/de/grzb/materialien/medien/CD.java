@@ -1,6 +1,7 @@
 package de.grzb.materialien.medien;
 
 import javax.persistence.Entity;
+import javax.validation.constraints.NotNull;
 
 /**
  * TODO für Blatt 1: CDBlatt1 verwenden
@@ -18,11 +19,13 @@ public class CD extends AbstractMedium implements Medium {
     /**
      * Der Interpret der CD
      */
+    @NotNull
     private String _interpret;
 
     /**
      * Die Spiellänge der CD in Minuten
      */
+    @NotNull
     private int _spiellaenge;
 
     /**

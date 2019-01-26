@@ -42,7 +42,7 @@ public class MedienDetailAnzeigerWerkzeug
         // TODO für Blatt 3: Schleife löschen
         for (Medium medium : medien)
         {
-            selectedMedienTextArea.append(medium.getFormatiertenString());
+            selectedMedienTextArea.append(medium.toFormatiertenString());
             selectedMedienTextArea.append("--------------- \n");
         }
     }

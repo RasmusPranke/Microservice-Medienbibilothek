@@ -48,6 +48,6 @@ public class KonsolenVideospiel extends AbstractVideospiel implements Medium
     @Override
     public String toString()
     {
-        return getFormatiertenString();
+        return toFormatiertenString();
     }
 }

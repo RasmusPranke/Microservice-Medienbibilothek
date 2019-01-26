@@ -89,7 +89,7 @@ public class Verleihkarte
      */
     public String getFormatiertenString()
     {
-        return _medium.getFormatiertenString() + "am "
+        return _medium.toFormatiertenString() + "am "
                 + _ausleihdatum.toString() + " verliehen an\n"
                 + _entleiher.getFormatiertenString();
     }

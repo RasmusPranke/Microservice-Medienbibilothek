@@ -1,5 +1,7 @@
 package de.grzb.materialien.medien;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
@@ -15,6 +17,7 @@ import de.grzb.fachwerte.Geldbetrag;
  */
 @MappedSuperclass
 public class AbstractMedium implements Medium {
+
     // 4 Leerzeichen für formatierte Strings
     protected static final String SPACE = "    ";
 
@@ -22,6 +25,10 @@ public class AbstractMedium implements Medium {
      * Gebühr für einen Tag
      */
     private final int _tagesmietgebuehr;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long _id;
 
     /**
      * Ein Kommentar zum Medium
@@ -32,7 +39,6 @@ public class AbstractMedium implements Medium {
      * Der Titel des Mediums
      * 
      */
-    @Id
     private String _titel;
 
     /**
@@ -69,9 +75,9 @@ public class AbstractMedium implements Medium {
     }
 
     @Override
-    public String getFormatiertenString() {
-        return getMedienBezeichnung() + ":\n" + SPACE + "Titel: " + _titel + "\n" + SPACE + "Kommentar: " + _kommentar
-                + "\n";
+    public String toFormatiertenString() {
+        return getMedienBezeichnung() + ":\n" + SPACE + "ID: " + _id + "\n" + SPACE + "Titel: " + _titel + "\n" + SPACE
+                + "Kommentar: " + _kommentar + "\n";
     }
 
     @Override
@@ -116,7 +122,16 @@ public class AbstractMedium implements Medium {
 
     @Override
     public String getMedienBezeichnung() {
-        return "Abstraktes Medium";
+        return "AbstractMedium";
     }
 
+    @Override
+    public long getId() {
+        return _id;
+    }
+
+    @Override
+    public void setId(long id) {
+        _id = id;
+    }
 }

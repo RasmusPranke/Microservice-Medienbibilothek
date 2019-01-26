@@ -67,7 +67,7 @@ public abstract class AbstractMediumTest
     public final void testGetFormatiertenString()
     {
         Medium medium = getMedium();
-        assertNotNull(medium.getFormatiertenString());
+        assertNotNull(medium.toFormatiertenString());
     }
 
     @Test

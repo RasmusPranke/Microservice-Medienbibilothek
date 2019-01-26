@@ -50,9 +50,9 @@ abstract class AbstractVideospiel extends AbstractMedium
     }
 
     @Override
-    public String getFormatiertenString()
+    public String toFormatiertenString()
     {
-        return super.getFormatiertenString() + SPACE + "System: " + getSystem()
+        return super.toFormatiertenString() + SPACE + "System: " + getSystem()
                 + "\n";
     }
 

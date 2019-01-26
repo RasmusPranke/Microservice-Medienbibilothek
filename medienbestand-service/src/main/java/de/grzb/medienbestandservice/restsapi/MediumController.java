@@ -5,9 +5,6 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.*;
-import org.springframework.cloud.client.*;
-import org.springframework.cloud.client.discovery.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,9 +18,6 @@ public class MediumController {
 
     private final CDRepository cdRepository;
     private final Log log;
-
-    @Autowired
-    private DiscoveryClient discoveryClient;
 
     public MediumController(CDRepository repository) {
         this.cdRepository = repository;

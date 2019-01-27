@@ -148,7 +148,7 @@ public class Vormerkkarte
         builder.append(_medium.toFormatiertenString() + " vorgemerkt von:\n");
         for (Kunde k : _vormerker)
         {
-            builder.append(k.getFormatiertenString());
+            builder.append(k.toFormatiertenString());
         }
         return builder.toString();
 

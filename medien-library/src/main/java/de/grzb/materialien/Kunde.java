@@ -1,5 +1,10 @@
 package de.grzb.materialien;
 
+import javax.persistence.Embedded;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.validation.constraints.NotNull;
+
 import de.grzb.fachwerte.Kundennummer;
 import de.grzb.fachwerte.PLZ;
 
@@ -11,26 +16,34 @@ import de.grzb.fachwerte.PLZ;
  * @author SE2-Team
  * @version SoSe 2014
  */
-public class Kunde
-{
+@Entity
+public class Kunde {
     // 4 Leerzeichen für formatierte Strings
     private static final String SPACE = "    ";
 
     // Zustandsfelder für Kundendaten
+    @EmbeddedId
+    @NotNull
     private Kundennummer _kundennummer;
+    @NotNull
     private String _nachname;
+    @Embedded
     private PLZ _plz;
     private String _strasse;
     private String _telefonnummer;
+    @NotNull
     private String _vorname;
     private String _wohnort;
 
     /**
      * Konstruktor für einen Kunden.
      * 
-     * @param kundennummer Eine Kundennummer.
-     * @param vorname Ein Vorname des Kunden.
-     * @param nachname Ein Nachname des Kunden.
+     * @param kundennummer
+     *            Eine Kundennummer.
+     * @param vorname
+     *            Ein Vorname des Kunden.
+     * @param nachname
+     *            Ein Nachname des Kunden.
      * 
      * @require kundennummer != null
      * @require vorname != null
@@ -40,8 +53,7 @@ public class Kunde
      * @ensure getVorname() == vorname
      * @ensure getNachname() == nachname
      */
-    public Kunde(Kundennummer kundennummer, String vorname, String nachname)
-    {
+    public Kunde(Kundennummer kundennummer, String vorname, String nachname) {
         assert kundennummer != null : "Vorbedingung verletzt: kundennummer != null";
         assert vorname != null : "Vorbedingung verletzt: vorname != null";
         assert nachname != null : "Vorbedingung verletzt: nachname != null";
@@ -52,6 +64,9 @@ public class Kunde
 
     }
 
+    protected Kunde() {
+    }
+
     /**
      * TODO für Blatt 3: löschen
      * 
@@ -60,10 +75,8 @@ public class Kunde
      * @return einen formatierten String mit allen Informationen zum Kunden.
      *         Enthält Zeilenumbrüche.
      */
-    public String getFormatiertenString()
-    {
-        String result = SPACE + "Kundennummer: " + getKundennummer().toString()
-                + "\n";
+    public String toFormatiertenString() {
+        String result = SPACE + "Kundennummer: " + getKundennummer().toString() + "\n";
         result += SPACE + "Name: " + getVorname() + " " + getNachname() + "\n";
         result += SPACE + "Telefon: " + getTelefonnummer() + "\n";
         result += SPACE + "Anschrift:\n" + getAnschrift() + "\n";
@@ -75,8 +88,7 @@ public class Kunde
      * 
      * @ensure result != null
      */
-    public Kundennummer getKundennummer()
-    {
+    public Kundennummer getKundennummer() {
         return _kundennummer;
     }
 
@@ -87,8 +99,7 @@ public class Kunde
      * 
      * @ensure result != null
      */
-    public String getNachname()
-    {
+    public String getNachname() {
         return _nachname;
     }
 
@@ -97,8 +108,7 @@ public class Kunde
      * 
      * @return Die Postleitzahl, kann null sein.
      */
-    public PLZ getPLZ()
-    {
+    public PLZ getPLZ() {
         return _plz;
     }
 
@@ -107,8 +117,7 @@ public class Kunde
      * 
      * @return Die Straße, kann null sein.
      */
-    public String getStrasse()
-    {
+    public String getStrasse() {
         return _strasse;
     }
 
@@ -120,11 +129,9 @@ public class Kunde
      * 
      * @ensure result != null
      */
-    public String getTelefonnummer()
-    {
+    public String getTelefonnummer() {
         String ergebnisText = _telefonnummer;
-        if (ergebnisText == null)
-        {
+        if(ergebnisText == null) {
             ergebnisText = "unbekannt";
         }
         return ergebnisText;
@@ -137,8 +144,7 @@ public class Kunde
      * 
      * @ensure result != null
      */
-    public String getVorname()
-    {
+    public String getVorname() {
         return _vorname;
     }
 
@@ -147,55 +153,83 @@ public class Kunde
      * 
      * @return Den Wohnort.
      */
-    public String getWohnort()
-    {
+    public String getWohnort() {
         return _wohnort;
     }
 
     /**
      * Setzt eine neue Postleitzahl.
      * 
-     * @param plz Die zu setzende Postleitzahl, darf null sein.
+     * @param plz
+     *            Die zu setzende Postleitzahl, darf null sein.
      */
-    public void setPLZ(PLZ plz)
-    {
+    public void setPLZ(PLZ plz) {
         _plz = plz;
     }
 
     /**
      * Setzt eine neue Straße.
      * 
-     * @param strasse Die zu setzende Straße, darf null sein.
+     * @param strasse
+     *            Die zu setzende Straße, darf null sein.
      */
-    public void setStrasse(String strasse)
-    {
+    public void setStrasse(String strasse) {
         _strasse = strasse;
     }
 
     /**
      * Setzt eine neue Telefonnummer
      * 
-     * @param telefonnummer Die zu setzende Telefonnummer, darf null sein.
+     * @param telefonnummer
+     *            Die zu setzende Telefonnummer, darf null sein.
      */
-    public void setTelefonnummer(String telefonnummer)
-    {
+    public void setTelefonnummer(String telefonnummer) {
         _telefonnummer = telefonnummer;
     }
 
     /**
      * Setzt einen neuen Wohnort
      * 
-     * @param wohnort Der zu setzende Wohnort, darf null sein.
+     * @param wohnort
+     *            Der zu setzende Wohnort, darf null sein.
      */
-    public void setWohnort(String wohnort)
-    {
+    public void setWohnort(String wohnort) {
         _wohnort = wohnort;
     }
 
+    /**
+     * Setzt den Vornamen. Benötigt für Spring JPA.
+     * 
+     * @param vorname
+     *            Der zu setzende Vorname.
+     */
+    protected void setVorname(String vorname) {
+        _vorname = vorname;
+    }
+
+    /**
+     * Setzt den Nachnamen. Benötigt für Spring JPA.
+     * 
+     * @param nachname
+     *            Der zu setzende Nachname.
+     */
+    protected void setNachname(String nachname) {
+        _nachname = nachname;
+    }
+
+    /**
+     * Setzt die Kundennummer. Notwendig für Spring JPA.
+     * 
+     * @param wohnort
+     *            Der zu setzende Wohnort, darf null sein.
+     */
+    protected void setKundennummer(Kundennummer kundennummer) {
+        _kundennummer = kundennummer;
+    }
+
     @Override
-    public String toString()
-    {
-        return getFormatiertenString();
+    public String toString() {
+        return toFormatiertenString();
     }
 
     /**
@@ -206,23 +240,18 @@ public class Kunde
      * 
      * @ensure result != null
      */
-    private String getAnschrift()
-    {
+    private String getAnschrift() {
         String result = "";
-        if ((getStrasse() != null))
-        {
+        if((getStrasse() != null)) {
             result += SPACE + getStrasse() + "\n";
         }
-        if (getPLZ() != null)
-        {
+        if(getPLZ() != null) {
             result += SPACE + getPLZ() + " ";
         }
-        if (getWohnort() != null)
-        {
+        if(getWohnort() != null) {
             result += getWohnort();
         }
-        if (result.length() == 0)
-        {
+        if(result.length() == 0) {
             result += SPACE + "unbekannt";
         }
         return result;

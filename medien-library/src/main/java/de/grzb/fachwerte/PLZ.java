@@ -3,6 +3,8 @@ package de.grzb.fachwerte;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.persistence.Embeddable;
+
 /**
  * TODO für Blatt 2: PLZBlatt2 verwenden
  * 
@@ -12,12 +14,11 @@ import java.util.regex.Pattern;
  * @author SE2-Team
  * @version SoSe 2014
  */
-public final class PLZ
-{
+@Embeddable
+public final class PLZ {
     // der benutzte reguläre Ausdruck zur Überprüfung der Gültigkeit von
     // Postleitzahlen.
-    private static final Pattern PLZ_PATTERN = Pattern
-            .compile("([dD]-)?([0-9]{5})");
+    private static final Pattern PLZ_PATTERN = Pattern.compile("([dD]-)?([0-9]{5})");
 
     /**
      * Die Postleitzahl als Stringrepräsentation (z.B. 22761)
@@ -32,12 +33,12 @@ public final class PLZ
     /**
      * Wählt eine PLZ aus.
      * 
-     * @param plz Die Postleitzahl als String.
+     * @param plz
+     *            Die Postleitzahl als String.
      * 
      * @require istGueltig(plz)
      */
-    public PLZ(String plz)
-    {
+    public PLZ(String plz) {
         assert istGueltig(plz) : "Vorbedingung verletzt: istGueltig(plz) ";
         Matcher m = PLZ_PATTERN.matcher(plz);
         m.matches();
@@ -45,16 +46,25 @@ public final class PLZ
         _plz = m.group(2);
     }
 
+    protected PLZ() {
+        _prefix = "";
+        _plz = "";
+    }
+
+    public String getPlz() {
+        return _prefix + _plz;
+    }
+
     /**
      * Liefert true, wenn die Postleitzahl 5 Zeichen und optional "D-" oder "d-"
      * davor hat, andernfalls false.
      * 
-     * @param plz Eine Postleitzahl zur Überprüfung
+     * @param plz
+     *            Eine Postleitzahl zur Überprüfung
      * @return true, wenn die Postleitzahl 5 Zeichen und optional "D-" oder "d-"
      *         davor hat, andernfalls false.
      */
-    public static boolean istGueltig(String plz)
-    {
+    public static boolean istGueltig(String plz) {
         Matcher m = PLZ_PATTERN.matcher(plz);
         return m.matches();
     }
@@ -63,16 +73,15 @@ public final class PLZ
      * Zwei Postleitzahlen sind gleich wenn ihre Ziffernkombinationen gleich
      * sind. Ein eventuelles Prefix wird nicht überprüft.
      * 
-     * @param obj Ein anderes Objekt.
+     * @param obj
+     *            Ein anderes Objekt.
      * @return true, wenn die die ziffernkombinationen gleich sind, ansonsten
      *         false.
      */
     @Override
-    public boolean equals(Object obj)
-    {
+    public boolean equals(Object obj) {
         boolean result = false;
-        if (obj instanceof PLZ)
-        {
+        if(obj instanceof PLZ) {
             PLZ vergleichsPLZ = (PLZ) obj;
             result = _plz.equals(vergleichsPLZ._plz);
         }
@@ -80,17 +89,14 @@ public final class PLZ
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return _plz.hashCode();
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         String result = "";
-        if (_prefix != null)
-        {
+        if(_prefix != null) {
             result += _prefix;
         }
         result += _plz;

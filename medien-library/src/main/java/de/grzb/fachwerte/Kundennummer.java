@@ -1,5 +1,9 @@
 package de.grzb.fachwerte;
 
+import java.io.Serializable;
+
+import javax.persistence.Embeddable;
+
 /**
  * Mit Kundennummern können Kunden eindeutig indentifiziert werden. Jede
  * Kundennummer ist 6 Zeichen lang.
@@ -7,8 +11,12 @@ package de.grzb.fachwerte;
  * @author SE2-Team
  * @version SoSe 2014
  */
-public final class Kundennummer
-{
+@Embeddable
+public final class Kundennummer implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 8752143146733814066L;
     /**
      * int-Repräsentation der Kundenummer
      */
@@ -17,15 +25,23 @@ public final class Kundennummer
     /**
      * Wählt eine Kundennummer, mit der angebenen Zahl, aus.
      * 
-     * @param kundennummer Eine gültige Zahl.
+     * @param kundennummer
+     *            Eine gültige Zahl.
      * 
      * @require istGueltig(kundennummer)
      */
-    public Kundennummer(int kundennummer)
-    {
+    public Kundennummer(int kundennummer) {
         assert istGueltig(kundennummer) : "Vorbedingung verletzt: istGueltig(kundennummer)";
 
         _kundennummer = kundennummer;
+    }
+
+    protected Kundennummer() {
+        _kundennummer = 0;
+    }
+
+    public int getKundennummer() {
+        return _kundennummer;
     }
 
     /**
@@ -33,27 +49,26 @@ public final class Kundennummer
      * Kundennummer ist gültig, wenn sie 6-stellig (dezimal) ist. Der verwendete
      * Reguläre Ausdruck zur Überprüfung lautet:"[0-9]{6}"
      * 
-     * @param kundennummer Ein zu übeprüfende Zahl.
+     * @param kundennummer
+     *            Ein zu übeprüfende Zahl.
      * @return true, wenn der Reguläre Ausdruck passt, ansonsten false.
      */
-    public static boolean istGueltig(int kundennummer)
-    {
+    public static boolean istGueltig(int kundennummer) {
         return String.valueOf(kundennummer).matches("[0-9]{6}");
     }
 
     /**
      * Zwei Kundennummern sind gleich wenn ihre Zahlenkombinationen gleich sind.
      * 
-     * @param obj Ein anderes Objekt.
+     * @param obj
+     *            Ein anderes Objekt.
      * @return true, wenn die die Zahlenkombinationen gleich sind, ansonsten
      *         false.
      */
     @Override
-    public boolean equals(Object obj)
-    {
+    public boolean equals(Object obj) {
         boolean result = false;
-        if (obj instanceof Kundennummer)
-        {
+        if(obj instanceof Kundennummer) {
             Kundennummer vergleichsKundennummer = (Kundennummer) obj;
             result = (_kundennummer == vergleichsKundennummer._kundennummer);
         }
@@ -61,14 +76,12 @@ public final class Kundennummer
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return _kundennummer;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return String.valueOf(_kundennummer);
     }
 

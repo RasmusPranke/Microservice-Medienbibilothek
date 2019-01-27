@@ -91,7 +91,7 @@ public class Verleihkarte
     {
         return _medium.toFormatiertenString() + "am "
                 + _ausleihdatum.toString() + " verliehen an\n"
-                + _entleiher.getFormatiertenString();
+                + _entleiher.toFormatiertenString();
     }
 
     /**

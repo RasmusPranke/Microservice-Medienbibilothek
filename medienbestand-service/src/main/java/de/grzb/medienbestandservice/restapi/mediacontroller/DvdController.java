@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.grzb.materialien.medien.DVD;
@@ -44,8 +45,8 @@ public class DvdController extends AbstractMediumController<DVD> {
     @Override
     @RequestMapping(path = "/enthaeltMedium", method = RequestMethod.GET, headers = {
             "medienBezeichnung=" + MEDIENBEZEICHNUNG })
-    public ResponseEntity<DVD> medium_has(@RequestBody @Valid DVD cd) {
-        return enthaeltMedium(cd);
+    public ResponseEntity<Boolean> medium_has(@RequestParam(value = "id") Long id) {
+        return enthaeltMedium(id);
     }
 
     @Override

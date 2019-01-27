@@ -4,15 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.validation.Valid;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import de.grzb.materialien.medien.Medium;
 
@@ -40,14 +37,12 @@ public abstract class AbstractMediumController<K extends Medium> implements IMed
         return medien;
     }
 
-    public ResponseEntity<K> enthaeltMedium(@RequestBody @Valid K medium) {
-        Optional<K> result = repo.findById(medium.getId());
+    public ResponseEntity<Boolean> enthaeltMedium(Long id) {
+        Optional<K> result = repo.findById(id);
         if(result.isPresent()) {
-            if(result.get().equals(medium)) {
-                return new ResponseEntity<K>(result.get(), HttpStatus.OK);
-            }
+            return new ResponseEntity<Boolean>(true, HttpStatus.OK);
         }
-        return new ResponseEntity<K>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<Boolean>(false, HttpStatus.OK);
     }
 
     /**

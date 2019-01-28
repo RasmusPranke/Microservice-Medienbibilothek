@@ -36,7 +36,7 @@
 }
 \lstset{style=mystyle}
 
-\author{Nikolai Elich & Rasmus Pranke}
+\author{Nikolai Elich \\ Rasmus Pranke}
 \title{Microservices am Beispiel mit Spring}
 
 \begin{document}
@@ -50,6 +50,7 @@ Das Spring-Framework verspricht, (unter anderem) diese Art von Architektur stark
 In diesem Paper übertragen wir eine sehr einfache monolithische Software mit Spring in eine Microservice-Architektur.
 Dabei betrachten wir den dafür benötigten Aufwand und die Wandlung der Qualitätsmerkmale im Verlauf der Entwicklung.
 Dabei zeigt sich Spring als ein mächtiges Werkzeug, das viele der inherenten Problematiken der Microservice-Architektur für uns löst, ohne dabei die Qualitätsmerkmale maßgeblich zu beeinflussen.
+Nebenher stellt sich außerdem der WAM-Ansatz, mit dem das Beispiel entworfen wurde, als potentiell nützlich für die Microservice-Architektur heraus.
 \end{abstract}
 
 \pagebreak
@@ -361,7 +362,7 @@ Dabei muss die Art der Fehlerbehandlung fest vordefiniert werden und kann nicht 
 
 Im Zusammenspiel lässt sich mit diesen Projekten der Netflix Open Source Software ein großer Teil des Bedarfs an Infrastruktur für Microservices decken.
 
-\subsection{Zusammenfassung}
+\section{Zusammenfassung}
 
 Wie den einzelnen Abschnitten zu entnehmen ist erlaubte uns Spring, viele der technischen Grundlagen der Microservice-Architektur in wenigen Zeilen Code abzuhandeln.
 Außerdem mussten wir die Architektur der Software dank des verwendeten WAM-Ansatzes nicht verändern.
@@ -370,33 +371,33 @@ Diese beiden Aspekte reduzierten gemeinsam den Arbeitsaufwand darauf, uns in die
 Wir mussten zwar an mehreren Stellen über die Architektur diskutieren, kamen dabei aber jedes mal zu dem Schluss, dass wir sie nicht verändern müssen.
 
 Die Software behält damit großteils ihre vorherigen Merkmale bei, lediglich um die inherenten Merkmale der Microservice-Architektur erweitert.
-Das heißt konkret auf die Qualitätsmerkmale nach ISO/IEC 9126 bezogen, dass:
+Das heißt konkret auf die Qualitätsmerkmale nach ISO/IEC 9126 bezogen:
 
 \begin{enumerate}
-	\item{Die Wartbarkeit ist eingeschränkt:
+	\item Die Wartbarkeit ist eingeschränkt:
 		\begin{enumerate}
 			\item In der Analysierbarkeit.
 			Dies hat zweierlei Gründe.
 			Erstens müssen nun viele verschiedene und getrennte Prozesse einzeln betrachtet werden.
-			Zweitens macht das komplexe Spring-Framework Fehler schwerer durchschaubar durch die enorme Abstraktion.}
+			Zweitens macht das komplexe Spring-Framework Fehler schwerer durchschaubar durch die enorme Abstraktion.
 			\item In der Testbarkeit. Statt die einzelnen Services vor Ort zu mocken müssen die Netzwerkgegebenheiten auch abgebildet werden, um ein akkurates Testergebnis zu erhalten.
 	\end{enumerate}
-	\item{Die Benutzbarkeit hat sich praktisch nicht verändert. Das Interface ist identisch, wenn auch nun mit etwas Latenz}
-	\item{Die Effizienz hat sich verändert.
+	\item Die Benutzbarkeit hat sich praktisch nicht verändert. Das Interface ist identisch, wenn auch nun mit etwas Latenz
+	\item Die Effizienz hat sich verändert.
 	Da die Software nun einfacher zu skalieren ist, hat sie nun ein höheren potentiellen Durchsatz.
-	Dafür ist der verwendete Speicher und die Rechenzeit pro Anfrage stark gestiegen, da nun eine Infrastruktur an Prozessen laufen muss statt einem Einzelnen.}
-	\item{Die Funktionalität ist unverändert.
-	Wir haben nichts an den Verträgen zwischen den Services geändert.}
-	\item{Die Übertragbarkeit ist leicht verbessert.
-	Durch die Trennung in Prozesse lassen sich verschiedene Versionen parallel zueinander ausliefern.}
-	\item{Die Zuverlässigkeit ist leicht verbessert.
-	Die Fehlertoleranz ist erhöht, da die Vervielfältigung von Instanzen einen Fehler in einer dieser ausgleichen kann.}
+	Dafür ist der verwendete Speicher und die Rechenzeit pro Anfrage stark gestiegen, da nun eine Infrastruktur an Prozessen laufen muss anstatt eines einzelnen Prozesses.
+	\item Die Funktionalität ist unverändert.
+	Wir haben nichts an den Verträgen zwischen den Services, oder an ihren Schnittstellen nach außen geändert.
+	\item Die Übertragbarkeit ist leicht verbessert.
+	Durch die Trennung in Prozesse lassen sich verschiedene Versionen parallel zueinander ausliefern.
+	\item Die Zuverlässigkeit ist leicht verbessert.
+	Die Fehlertoleranz ist erhöht, da die Vervielfältigung von Instanzen einen Fehler in einer dieser ausgleichen kann.
 \end{enumerate}
 
 (Hier sei angemerkt, dass wir die veraltete ISO/IEC 9126 verwenden, da uns diese aus Vorlesungen bekannt ist und da wir keinen Zugriff auf die neuere ISO/IEC 25010 haben.)
 
 Insgesamt haben sich die Qualitätsmerkmale nicht ausschlaggebend verbessert oder verschlechtert.
-Die vorhandenen Änderungen lassen sich darauf zurückführen, dass wir ein einfaches System in ein viel komplexeres Framework eingebettet haben.
+Die vorhandenen Änderungen lassen sich darauf zurückführen, dass wir ein einfaches System in ein viel komplexeres Framework eingebettet und zu einem verteilten System transformiert haben.
 
 Hervorzuheben ist hierbei, wie die von der von Microservice-Architektur zu erwartenden Vorteile  hinsichtlich der Wartbarkeit ausgeblieben sind.
 Dies führen wir auf den WAM-Ansatz zurück.
@@ -405,13 +406,16 @@ Dies ist für uns ein vielversprechendes Indiz, dass der WAM-Ansatz grundsätzli
 
 \section{Fazit}
 
-Spring hat es uns ermöglicht, ohne Vorerfahrung innerhalb weniger Tage eine Microservice-Architektur umzusetzen.
-Die obigen Beispiele illustrieren deutlich, wie Spring ermöglicht, sich voll und ganz auf die Implementation der Funktionalität der Microservices zu fokussieren.
-Der resultierende Code ist sehr einfach wiederzuverwenden und stark abstrahiert.
+Die Spring-Frameworks bieten mächtige Abstraktionen für viele der technischen Grundlagen der Microservice-Archtiektur.
+Sie ermöglichen eine schnelle Entwicklung auf Kosten einer recht aufwendigen Einarbeitung, allerdings ohne das Resultat maßgeblich zu beeinträchtigen.
 
-Die größten Schwierigkeiten einer Microservice-Architektur liegen normalerweise in den Schwierigkeiten verteilter Systeme, wie zum Beispiel der Definition eines Kommunikationsprotokolls.
-Die meisten dieser Schwierigkeiten werden von Spring ohne Aufwand seitens der Programmierers gelöst.
-Damit bietet Spring eine wichtige Grundlage für gutes Software-Engineering in der Form einer wiederverwendbaren und abstrakten Basis, mit der sich individuell gestaltete Komponenten verbinden lassen.
+Deshalb halten wir Spring für einen signifikanten Beitrag zum Software-Engineering im Bezug auf Microservices.
+Durch Spring kann man sich voll und ganz auf den Entwurf und die Implementation der Funktionalitäten fokussieren, statt sich mit technischen Details auseinanderzusetzen.
+Der dabei entstehende Code ist nicht durch Spring schwerer wartbar und insgesamt einfach wiederzuverwenden.
+
+Unabhängig davon halten wir es für sinnvoll, den WAM-Ansatz in Bezug auf Microservices näher zu betrachten.
+Die bereits vorgesehene Unterteilung in Services scheint sich einfach auf Microservices übertragen zu lassen.
+Besonders interessant ist die Frage, ob die von uns bei diesem sehr kleinen Beispiel beobachtete Eignung auch bei größeren Systemen vorhanden ist.
 
 \bibliographystyle{plain}
 \addcontentsline{toc}{section}{Literatur}

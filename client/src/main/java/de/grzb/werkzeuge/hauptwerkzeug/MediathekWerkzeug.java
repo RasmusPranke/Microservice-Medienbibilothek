@@ -1,0 +1,186 @@
+package de.grzb.werkzeuge.hauptwerkzeug;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import de.grzb.services.kundenstamm.KundenstammServiceConnector;
+import de.grzb.services.medienbestand.MedienbestandServiceConnector;
+import de.grzb.services.verleih.VerleihServiceConnector;
+import de.grzb.werkzeuge.ausleihe.AusleihWerkzeug;
+import de.grzb.werkzeuge.medienverwaltung.MedienverwaltungsWerkzeug;
+import de.grzb.werkzeuge.rueckgabe.RueckgabeWerkzeug;
+import de.grzb.werkzeuge.vormerken.VormerkWerkzeug;
+
+/**
+ * Das Gesamtwerkzeug der Mediathek, das die anderen Werkzeuge zusammenfasst.
+ * 
+ * @author SE2-Team
+ * @version SoSe 2014
+ */
+public class MediathekWerkzeug
+{
+    /**
+     * Die UI der Mediathek.
+     */
+    private MediathekUI _mediathekUI;
+
+    /**
+     * Der Kundenstamm.
+     */
+    private final KundenstammServiceConnector _kundenstamm;
+
+    /**
+     * Der Medienbestand.
+     */
+    private final MedienbestandServiceConnector _medienbestand;
+
+    /**
+     * Der Service zum Verleihen und Zurücknehmen von Medien.
+     */
+    private final VerleihServiceConnector _verleihService;
+
+    /**
+     * Das AusleihWerkzeug.
+     */
+    private final AusleihWerkzeug _ausleihWerkzeug;
+
+    /**
+     * Das RueckgabeWerkzeug.
+     */
+    private final RueckgabeWerkzeug _rueckgabeWerkzeug;
+
+    /**
+     * Das MedienverwaltungsWerkzeug.
+     */
+    private final MedienverwaltungsWerkzeug _medienverwaltungsWerkzeug;
+
+    /**
+     * Das VormerkWerkzeug.
+     */
+    private VormerkWerkzeug _vormerkWerkzeug;
+
+    /**
+     * Initialisiert ein neues MediathekWerkzeug.
+     * 
+     * @param medienbestand der Medienbestand
+     * @param kundenstamm die Kunden
+     * @param verleihServiceConnector Service um Medien zu verleihen.
+     * 
+     * @require medienbestand != null
+     * @require kundenstamm != null
+     * @require verleihService != null
+     */
+    public MediathekWerkzeug(MedienbestandServiceConnector medienbestand,
+            KundenstammServiceConnector kundenstamm, VerleihServiceConnector verleihServiceConnector)
+    {
+        assert medienbestand != null : "Vorbedingung verletzt: medienbestand != null";
+        assert kundenstamm != null : "Vorbedingung verletzt: kundenstamm != null";
+        assert verleihServiceConnector != null : "Vorbedingung verletzt: verleihService != null";
+
+        _medienbestand = medienbestand;
+        _kundenstamm = kundenstamm;
+        _verleihService = verleihServiceConnector;
+
+        // Erzeuge Subwerkzeuge
+        _ausleihWerkzeug = new AusleihWerkzeug(_medienbestand, _kundenstamm,
+                _verleihService);
+        _rueckgabeWerkzeug = new RueckgabeWerkzeug(_verleihService);
+        _vormerkWerkzeug = new VormerkWerkzeug(_medienbestand, _kundenstamm,
+                _verleihService);
+        _medienverwaltungsWerkzeug = new MedienverwaltungsWerkzeug(
+                _medienbestand, _verleihService);
+
+        // Erzeuge UI für dieses Werkzeug
+        _mediathekUI = new MediathekUI(_ausleihWerkzeug.getUIPanel(),
+                _rueckgabeWerkzeug.getUIPanel(), _vormerkWerkzeug.getUIPanel(),
+                _medienverwaltungsWerkzeug.getUIPanel());
+
+        registriereUIAktionen();
+    }
+
+    /**
+     * Registriert die Aktionen an der UI, die bei bestimmten Benutzeraktionen
+     * ausgeführt werden sollen.
+     */
+    private void registriereUIAktionen()
+    {
+        registriereZeigeAusleiheAktion();
+        registriereZeigeRueckgabeAktion();
+        registriereZeigeVormerkAnsichtAktion();
+        registriereZeigeMedienverwaltungAktion();
+    }
+
+    /**
+     * Registriert die Aktion, die ausgeführt wird, um die Medienverwaltung
+     * anzuzeigen.
+     */
+    private void registriereZeigeMedienverwaltungAktion()
+    {
+        _mediathekUI.getMedienverwaltungsButton().addActionListener(
+                new ActionListener()
+                {
+                    @Override
+                    public void actionPerformed(ActionEvent e)
+                    {
+                        _mediathekUI.zeigeMedienverwaltung();
+                    }
+                });
+    }
+
+    /**
+     * Registriert die Aktion, die ausgeführt wird, um die Rueckgabe anzuzeigen.
+     */
+    private void registriereZeigeRueckgabeAktion()
+    {
+        _mediathekUI.getRueckgabeButton().addActionListener(
+                new ActionListener()
+                {
+
+                    @Override
+                    public void actionPerformed(ActionEvent e)
+                    {
+                        _mediathekUI.zeigeRueckgabe();
+                    }
+                });
+    }
+
+    /**
+     * Registriert die Aktion, die ausgeführt wird, um die Vormerkansicht
+     * anzuzeigen.
+     */
+    private void registriereZeigeVormerkAnsichtAktion()
+    {
+        _mediathekUI.getVormerkButton().addActionListener(new ActionListener()
+        {
+
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                _mediathekUI.zeigeVormerkAnsicht();
+            }
+        });
+    }
+
+    /**
+     * Registriert die Aktion, die ausgeführt wird, um die Ausleihe anzuzeigen.
+     */
+    private void registriereZeigeAusleiheAktion()
+    {
+        _mediathekUI.getAusleiheButton().addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                _mediathekUI.zeigeAusleihe();
+            }
+        });
+    }
+
+    /**
+     * Zeigt das Mediathek-Hauptfenster an.
+     */
+    public void zeigeFenster()
+    {
+        _mediathekUI.zeigeFenster();
+    }
+}

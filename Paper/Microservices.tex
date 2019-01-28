@@ -60,25 +60,22 @@ Dabei zeigt sich Spring als ein mächtiges Werkzeug, das viele der inherenten Pr
 
 \section{Motivation}
 
-\section{Microservices}
-
 Microservices sind ein relativ neuer Ansatz der Softwarearchitektur, bei dem Software in viele kleine, unabhängige Prozesse aufgespalten wird.
 Jeder dieser übernimmt einen kleinen Anteil der Gesamtfunktionalität und kommuniziert mit anderen Services, um diesen zu Erfüllen.\cite{OMA}
 
 Microservices glänzen vor allem durch eine bedeutend stärkere Kapselung als es bei monolithischer Software normalerweise der Fall ist.
-Durch die Trennung in verschiedene Prozesse können die Umgebungen der einzelnen Services auf ihren jeweiligen Aufgabenbereich angepasst werden.
-Als Komponenten der Gesamtsoftware sind sie dadurch nicht mehr an einen gemeinsamen Technologiestack gebunden und müssen sich auch keine Hardware mehr teilen.
-Die einzelnen Services können weitestgehend unabhängig voneinander verändert und ausgetauscht werden.\cite{EMMA}
+Die Trennung in verschiedene Prozesse bringt viele Vorteile mit sich, da diese sich weder Hardware noch Software teilen müssen.
+Damit können die einzelnen Services weitestgehend unabhängig voneinander verändert und erweitert werden.\cite{EMMA}
 
-Außerdem erleichtern Microservices die horizontale Skalierung, da die inherente Trennung in einzelne Prozesse vergleichsweise einfache Duplikation der Instanzen erlaubt.
+Außerdem erleichtern Microservices die horizontale Skalierung, da die inherente Trennung in einzelne Prozesse vergleichsweise einfache Vervielfältigung dieser erlaubt.
 Dieses führt gleichzeitig zu einer besseren Fehlertoleranz, da damit jede Komponente redundant vorhanden ist.\cite{OMA}
 
 Allerdings kommen diese Vorteile nicht ohne Kosten.
-So muss zum Beispiel während der Designphase muss entschieden werden wie die Funktionalität in Services aufgeteilt wird, welches eine große Hürde beim entwerfen von Microservices darstellt.\cite{SCASASD}
+Microservices sind schwerer zu entwerfen, da die Unterteilung, welche Funktionalität in welchen Services abgedeckt werden soll, ein große Hürde darstellt. \cite{SCASASD}
+Außerdem sind sie durch ihre verteilte Natur weiteren Einschränkungen unterworfen, wie zum Beispiel dass zu teilende Daten über ein Netzwerk mit ungewisser Latenz verschickt werden müssen. \cite{MATT}
 
-Insbesondere sind Microservices aber verteilte Systeme, welche in der Praxis aus vielen Gründen schwerer zu entwickeln sind.\cite{MATT}
-Dazu zählt unter anderem, dass die Vernetzung von Systemen viel Aufwand in der Form von Kommunikationsprotokollen und Aufbau von Verbindungen benötigt.
-Wir wollen aufzeigen, wie das Spring-Framework diese Probleme mit wenig Aufwand löst.
+In diesem Paper beschäftigen wir uns mit der technologischen Hürde und insbesondere, wie die sogennanten Spring-Frameworks helfen, diese zu bewältigen.
+Wir werden betrachten, wie sich Microservices auf einer technischen Ebene mithilfe von Spring umsetzen lassen und inwieweit die Qualitätsmerkmale der Software davon beeinflusst werden.
 
 \section{Die Spring-Frameworks}
 
@@ -364,13 +361,47 @@ Dabei muss die Art der Fehlerbehandlung fest vordefiniert werden und kann nicht 
 
 Im Zusammenspiel lässt sich mit diesen Projekten der Netflix Open Source Software ein großer Teil des Bedarfs an Infrastruktur für Microservices decken.
 
-\section{Vor- und Nachteile von Spring}
+\subsection{Zusammenfassung}
 
-JPA ermöglicht es, Datenbanken zu nutzen, ohne sich mit SQL auszukennen.
-Durch die automatische Generierung der Datenbankverbindung durch Spring muss man sich also ausschließlich mit den Anfragen selbst beschäftigen.
+Wie den einzelnen Abschnitten zu entnehmen ist erlaubte uns Spring, viele der technischen Grundlagen der Microservice-Architektur in wenigen Zeilen Code abzuhandeln.
+Außerdem mussten wir die Architektur der Software dank des verwendeten WAM-Ansatzes nicht verändern.
 
-SCDF ist extrem leicht erlernbar und ermöglicht mit minimalem Aufwand das Definieren und Konfigurieren von Daten-Pipelines.
-Es erlaubt außerdem tiefere Konfigurierung des Deployments, wie zum Beispiel das Angeben der Anzahl von Instanzen, die von einem Service erstellt werden sollen, oder das zuweisen von Rechenkapazität für einzelne Services.
+Diese beiden Aspekte reduzierten gemeinsam den Arbeitsaufwand darauf, uns in die verschiedenen Spring-Frameworks einzulesen.
+Wir mussten zwar an mehreren Stellen über die Architektur diskutieren, kamen dabei aber jedes mal zu dem Schluss, dass wir sie nicht verändern müssen.
+
+Die Software behält damit großteils ihre vorherigen Merkmale bei, lediglich um die inherenten Merkmale der Microservice-Architektur erweitert.
+Das heißt konkret auf die Qualitätsmerkmale nach ISO/IEC 9126 bezogen, dass:
+
+\begin{enumerate}
+	\item{Die Wartbarkeit ist eingeschränkt:
+		\begin{enumerate}
+			\item In der Analysierbarkeit.
+			Dies hat zweierlei Gründe.
+			Erstens müssen nun viele verschiedene und getrennte Prozesse einzeln betrachtet werden.
+			Zweitens macht das komplexe Spring-Framework Fehler schwerer durchschaubar durch die enorme Abstraktion.}
+			\item In der Testbarkeit. Statt die einzelnen Services vor Ort zu mocken müssen die Netzwerkgegebenheiten auch abgebildet werden, um ein akkurates Testergebnis zu erhalten.
+	\end{enumerate}
+	\item{Die Benutzbarkeit hat sich praktisch nicht verändert. Das Interface ist identisch, wenn auch nun mit etwas Latenz}
+	\item{Die Effizienz hat sich verändert.
+	Da die Software nun einfacher zu skalieren ist, hat sie nun ein höheren potentiellen Durchsatz.
+	Dafür ist der verwendete Speicher und die Rechenzeit pro Anfrage stark gestiegen, da nun eine Infrastruktur an Prozessen laufen muss statt einem Einzelnen.}
+	\item{Die Funktionalität ist unverändert.
+	Wir haben nichts an den Verträgen zwischen den Services geändert.}
+	\item{Die Übertragbarkeit ist leicht verbessert.
+	Durch die Trennung in Prozesse lassen sich verschiedene Versionen parallel zueinander ausliefern.}
+	\item{Die Zuverlässigkeit ist leicht verbessert.
+	Die Fehlertoleranz ist erhöht, da die Vervielfältigung von Instanzen einen Fehler in einer dieser ausgleichen kann.}
+\end{enumerate}
+
+(Hier sei angemerkt, dass wir die veraltete ISO/IEC 9126 verwenden, da uns diese aus Vorlesungen bekannt ist und da wir keinen Zugriff auf die neuere ISO/IEC 25010 haben.)
+
+Insgesamt haben sich die Qualitätsmerkmale nicht ausschlaggebend verbessert oder verschlechtert.
+Die vorhandenen Änderungen lassen sich darauf zurückführen, dass wir ein einfaches System in ein viel komplexeres Framework eingebettet haben.
+
+Hervorzuheben ist hierbei, wie die von der von Microservice-Architektur zu erwartenden Vorteile  hinsichtlich der Wartbarkeit ausgeblieben sind.
+Dies führen wir auf den WAM-Ansatz zurück.
+Wir mussten den bestehenden Entwurf für die Software nicht anpassen, um sie in eine Microservice-Architektur zu überführen.
+Dies ist für uns ein vielversprechendes Indiz, dass der WAM-Ansatz grundsätzlich für die Architektur von Microservices nützlich sein könnte und viele ihrer Vorteile auch schon in einer monolithischen Architektur mitbringen kann.
 
 \section{Fazit}
 

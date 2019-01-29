@@ -36,7 +36,7 @@
 }
 \lstset{style=mystyle}
 
-\author{Nikolai Elich & Rasmus Pranke}
+\author{Nikolai Elich \\ Rasmus Pranke}
 \title{Microservices am Beispiel mit Spring}
 
 \begin{document}
@@ -44,10 +44,13 @@
 \maketitle
 
 \begin{abstract}
-Die Microservice-Architektur ist eine neue Entwicklung im Bereich Software-Engineering, die eine einfachere Entwicklung und Skalierung von komplexen Softwaresystemen ermöglicht.
+Die Microservice-Architektur ist eine neue Entwicklung im Bereich Software-Engineering, bei der die Funktionalität in viele einzelne, unabhängige, sogenannte Microservices aufgespalten wird.
+Diese Archiktektur ermögolicht eine einfachere Entwicklung und Skalierung von komplexen Softwaresystemen.
 Das Spring-Framework verspricht, (unter anderem) diese Art von Architektur stark zu vereinfachen und innerhalb kurzer Zeit auch komplizierte Systeme lauffähig zu machen.
-In diesem Paper übertragen wir eine sehr einfache monolithische Software mit Spring in eine Microservice-Architektur und betrachten dabei, inwiefern Spring uns dabei unterstützt.
-Dank der durch Spring bereitgestellten Technologien gelingt uns dieses trotz fehlender Vorkenntnisse in einem sehr kurzen Zeitrahmen.
+In diesem Paper übertragen wir eine sehr einfache monolithische Software mit Spring in eine Microservice-Architektur.
+Dabei betrachten wir den dafür benötigten Aufwand und die Wandlung der Qualitätsmerkmale im Verlauf der Entwicklung.
+Dabei zeigt sich Spring als ein mächtiges Werkzeug, das viele der inherenten Problematiken der Microservice-Architektur für uns löst, ohne dabei die Qualitätsmerkmale maßgeblich zu beeinflussen.
+Nebenher stellt sich außerdem der WAM-Ansatz, mit dem das Beispiel entworfen wurde, als potentiell nützlich für die Microservice-Architektur heraus.
 \end{abstract}
 
 \pagebreak
@@ -58,25 +61,22 @@ Dank der durch Spring bereitgestellten Technologien gelingt uns dieses trotz feh
 
 \section{Motivation}
 
-\section{Microservices}
-
 Microservices sind ein relativ neuer Ansatz der Softwarearchitektur, bei dem Software in viele kleine, unabhängige Prozesse aufgespalten wird.
 Jeder dieser übernimmt einen kleinen Anteil der Gesamtfunktionalität und kommuniziert mit anderen Services, um diesen zu Erfüllen.\cite{OMA}
 
 Microservices glänzen vor allem durch eine bedeutend stärkere Kapselung als es bei monolithischer Software normalerweise der Fall ist.
-Durch die Trennung in verschiedene Prozesse können die Umgebungen der einzelnen Services auf ihren jeweiligen Aufgabenbereich angepasst werden.
-Als Komponenten der Gesamtsoftware sind sie dadurch nicht mehr an einen gemeinsamen Technologiestack gebunden und müssen sich auch keine Hardware mehr teilen.
-Die einzelnen Services können weitestgehend unabhängig voneinander verändert und ausgetauscht werden.\cite{EMMA}
+Die Trennung in verschiedene Prozesse bringt viele Vorteile mit sich, da diese sich weder Hardware noch Software teilen müssen.
+Damit können die einzelnen Services weitestgehend unabhängig voneinander verändert und erweitert werden.\cite{EMMA}
 
-Außerdem erleichtern Microservices die horizontale Skalierung, da die inherente Trennung in einzelne Prozesse vergleichsweise einfache Duplikation der Instanzen erlaubt.
+Außerdem erleichtern Microservices die horizontale Skalierung, da die inherente Trennung in einzelne Prozesse vergleichsweise einfache Vervielfältigung dieser erlaubt.
 Dieses führt gleichzeitig zu einer besseren Fehlertoleranz, da damit jede Komponente redundant vorhanden ist.\cite{OMA}
 
 Allerdings kommen diese Vorteile nicht ohne Kosten.
-So muss zum Beispiel während der Designphase muss entschieden werden wie die Funktionalität in Services aufgeteilt wird, welches eine große Hürde beim entwerfen von Microservices darstellt.\cite{SCASASD}
+Microservices sind schwerer zu entwerfen, da die Unterteilung, welche Funktionalität in welchen Services abgedeckt werden soll, ein große Hürde darstellt. \cite{SCASASD}
+Außerdem sind sie durch ihre verteilte Natur weiteren Einschränkungen unterworfen, wie zum Beispiel dass zu teilende Daten über ein Netzwerk mit ungewisser Latenz verschickt werden müssen. \cite{MATT}
 
-Insbesondere sind Microservices aber verteilte Systeme, welche in der Praxis aus vielen Gründen schwerer zu entwickeln sind.\cite{MATT}
-Dazu zählt unter anderem, dass die Vernetzung von Systemen viel Aufwand in der Form von Kommunikationsprotokollen und Aufbau von Verbindungen benötigt.
-Wir wollen aufzeigen, wie das Spring-Framework diese Probleme mit wenig Aufwand löst.
+In diesem Paper beschäftigen wir uns mit der technologischen Hürde und insbesondere, wie die sogennanten Spring-Frameworks helfen, diese zu bewältigen.
+Wir werden betrachten, wie sich Microservices auf einer technischen Ebene mithilfe von Spring umsetzen lassen und inwieweit die Qualitätsmerkmale der Software davon beeinflusst werden.
 
 \section{Die Spring-Frameworks}
 
@@ -110,13 +110,10 @@ public class MedienbestandServiceApplication {
 }
 \end{lstlisting}
 
-Die \texttt{@SpringBootApplication}-Annotation markiert die Klasse als mit Spring Boot ausführbar, wodurch sie mit \texttt{SpringApplication.run} ausgeführt werden kann.
+Wir markieren die Klasse mit der \texttt{@SpringBootApplication}-Annotation als mit Spring Boot ausführbar, wodurch sie mit \texttt{SpringApplication.run} ausgeführt werden kann.
 
 Spring durchsucht daraufhin das aktuelle Paket sowie alle Sub-Pakete nach bestimmten Annotationen, welche andere Klassen als Module der Anwendung deklarieren.
 Einige davon werden in den folgenden Sektionen angesprochen.
-
-Hier zeigt sich auch eine der größten Stärken von Spring: Wir müssen uns nicht damit auseinandersetzen, wie unser Code geladen wird.
-Spring übernimmt die Komposition des Services und erleichtert diese damit um ein Vielfaches.
 
 \subsection{Migration zu Datenbanken}
 
@@ -365,23 +362,60 @@ Dabei muss die Art der Fehlerbehandlung fest vordefiniert werden und kann nicht 
 
 Im Zusammenspiel lässt sich mit diesen Projekten der Netflix Open Source Software ein großer Teil des Bedarfs an Infrastruktur für Microservices decken.
 
-\section{Vor- und Nachteile von Spring}
+\section{Zusammenfassung}
 
-JPA ermöglicht es, Datenbanken zu nutzen, ohne sich mit SQL auszukennen.
-Durch die automatische Generierung der Datenbankverbindung durch Spring muss man sich also ausschließlich mit den Anfragen selbst beschäftigen.
+Wie den einzelnen Abschnitten zu entnehmen ist erlaubte uns Spring, viele der technischen Grundlagen der Microservice-Architektur in wenigen Zeilen Code abzuhandeln.
+Außerdem mussten wir die Architektur der Software dank des verwendeten WAM-Ansatzes nicht verändern.
 
-SCDF ist extrem leicht erlernbar und ermöglicht mit minimalem Aufwand das Definieren und Konfigurieren von Daten-Pipelines.
-Es erlaubt außerdem tiefere Konfigurierung des Deployments, wie zum Beispiel das Angeben der Anzahl von Instanzen, die von einem Service erstellt werden sollen, oder das zuweisen von Rechenkapazität für einzelne Services.
+Diese beiden Aspekte reduzierten gemeinsam den Arbeitsaufwand darauf, uns in die verschiedenen Spring-Frameworks einzulesen.
+Wir mussten zwar an mehreren Stellen über die Architektur diskutieren, kamen dabei aber jedes mal zu dem Schluss, dass wir sie nicht verändern müssen.
+
+Die Software behält damit großteils ihre vorherigen Merkmale bei, lediglich um die inherenten Merkmale der Microservice-Architektur erweitert.
+Das heißt konkret auf die Qualitätsmerkmale nach ISO/IEC 9126 bezogen:
+
+\begin{enumerate}
+	\item Die Wartbarkeit ist eingeschränkt:
+		\begin{enumerate}
+			\item In der Analysierbarkeit.
+			Dies hat zweierlei Gründe.
+			Erstens müssen nun viele verschiedene und getrennte Prozesse einzeln betrachtet werden.
+			Zweitens macht das komplexe Spring-Framework Fehler schwerer durchschaubar durch die enorme Abstraktion.
+			\item In der Testbarkeit. Statt die einzelnen Services vor Ort zu mocken müssen die Netzwerkgegebenheiten auch abgebildet werden, um ein akkurates Testergebnis zu erhalten.
+	\end{enumerate}
+	\item Die Benutzbarkeit hat sich praktisch nicht verändert. Das Interface ist identisch, wenn auch nun mit etwas Latenz
+	\item Die Effizienz hat sich verändert.
+	Da die Software nun einfacher zu skalieren ist, hat sie nun ein höheren potentiellen Durchsatz.
+	Dafür ist der verwendete Speicher und die Rechenzeit pro Anfrage stark gestiegen, da nun eine Infrastruktur an Prozessen laufen muss anstatt eines einzelnen Prozesses.
+	\item Die Funktionalität ist unverändert.
+	Wir haben nichts an den Verträgen zwischen den Services, oder an ihren Schnittstellen nach außen geändert.
+	\item Die Übertragbarkeit ist leicht verbessert.
+	Durch die Trennung in Prozesse lassen sich verschiedene Versionen parallel zueinander ausliefern.
+	\item Die Zuverlässigkeit ist leicht verbessert.
+	Die Fehlertoleranz ist erhöht, da die Vervielfältigung von Instanzen einen Fehler in einer dieser ausgleichen kann.
+\end{enumerate}
+
+(Hier sei angemerkt, dass wir die veraltete ISO/IEC 9126 verwenden, da uns diese aus Vorlesungen bekannt ist und da wir keinen Zugriff auf die neuere ISO/IEC 25010 haben.)
+
+Insgesamt haben sich die Qualitätsmerkmale nicht ausschlaggebend verbessert oder verschlechtert.
+Die vorhandenen Änderungen lassen sich darauf zurückführen, dass wir ein einfaches System in ein viel komplexeres Framework eingebettet und zu einem verteilten System transformiert haben.
+
+Hervorzuheben ist hierbei, wie die von der von Microservice-Architektur zu erwartenden Vorteile  hinsichtlich der Wartbarkeit ausgeblieben sind.
+Dies führen wir auf den WAM-Ansatz zurück.
+Wir mussten den bestehenden Entwurf für die Software nicht anpassen, um sie in eine Microservice-Architektur zu überführen.
+Dies ist für uns ein vielversprechendes Indiz, dass der WAM-Ansatz grundsätzlich für die Architektur von Microservices nützlich sein könnte und viele ihrer Vorteile auch schon in einer monolithischen Architektur mitbringen kann.
 
 \section{Fazit}
 
-Spring hat es uns ermöglicht, ohne Vorerfahrung innerhalb weniger Tage eine Microservice-Architektur umzusetzen.
-Die obigen Beispiele illustrieren deutlich, wie Spring ermöglicht, sich voll und ganz auf die Implementation der Funktionalität der Microservices zu fokussieren.
-Der resultierende Code ist sehr einfach wiederzuverwenden und stark abstrahiert.
+Die Spring-Frameworks bieten mächtige Abstraktionen für viele der technischen Grundlagen der Microservice-Archtiektur.
+Sie ermöglichen eine schnelle Entwicklung auf Kosten einer recht aufwendigen Einarbeitung, allerdings ohne das Resultat maßgeblich zu beeinträchtigen.
 
-Die größten Schwierigkeiten einer Microservice-Architektur liegen normalerweise in den Schwierigkeiten verteilter Systeme, wie zum Beispiel der Definition eines Kommunikationsprotokolls.
-Die meisten dieser Schwierigkeiten werden von Spring ohne Aufwand seitens der Programmierers gelöst.
-Damit bietet Spring eine wichtige Grundlage für gutes Software-Engineering in der Form einer wiederverwendbaren und abstrakten Basis, mit der sich individuell gestaltete Komponenten verbinden lassen.
+Deshalb halten wir Spring für einen signifikanten Beitrag zum Software-Engineering im Bezug auf Microservices.
+Durch Spring kann man sich voll und ganz auf den Entwurf und die Implementation der Funktionalitäten fokussieren, statt sich mit technischen Details auseinanderzusetzen.
+Der dabei entstehende Code ist nicht durch Spring schwerer wartbar und insgesamt einfach wiederzuverwenden.
+
+Unabhängig davon halten wir es für sinnvoll, den WAM-Ansatz in Bezug auf Microservices näher zu betrachten.
+Die bereits vorgesehene Unterteilung in Services scheint sich einfach auf Microservices übertragen zu lassen.
+Besonders interessant ist die Frage, ob die von uns bei diesem sehr kleinen Beispiel beobachtete Eignung auch bei größeren Systemen vorhanden ist.
 
 \bibliographystyle{plain}
 \addcontentsline{toc}{section}{Literatur}

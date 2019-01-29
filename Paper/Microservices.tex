@@ -127,37 +127,7 @@ Spring stellt dafür eine Reihe an Frameworks unter dem Namen \texttt{Spring Dat
 \end{itemize}
 
 Jedes dieser Module bezieht sich dabei auf eine spezifische Technologie.
-Da wir uns für eine relationale Datenbank entschieden haben sind für uns lediglich JDBC und JPA interessant.
-
-\subsubsection{JDBC}
-
-JDBC abstrahiert die Verbindung zu einer Datenbank und stellt Methoden bereit, um via SQL auf diese zuzugreifen.
-Um via JDBC auf eine Datenbank zuzugreifen deklarieren wir eine \texttt{JdbcTemplate}-Deklaration mit der \texttt{Autowired}-Annotation:
-
-\begin{lstlisting}
-public class Exampleclass {
-    @Autowired
-    JdbcTemplate jdbcTemplate;
-}
-\end{lstlisting}
-
-Spring sucht sich nun anhand der vorhandenen Module sowie den Einstellungsdateien alle Informationen zur Datenbank zusammen, stellt eine Verbindung zu dieser her und stellt diese mithilfe dieser \texttt{JdbcTemplate} automatisch (dank der \texttt{Autowired}-Annotation) bereit.
-Damit reduziert sich unser Aufwand, mit dieser Datenbank zu interagieren, auf das Schreiben und Auswerten der Queries:
-
-\begin{lstlisting}
-log.info("Creating tables");
-
-dbcTemplate.execute("DROP TABLE customers IF EXISTS");
-jdbcTemplate.execute("CREATE TABLE customers(" + "id SERIAL, first_name VARCHAR(255), last_name VARCHAR(255))");
-
-// Uses JdbcTemplate's batchUpdate operation to bulk load data
-jdbcTemplate.batchUpdate("INSERT INTO customers(first_name, last_name) VALUES (?,?)", [["Josh", "Doe"], ["Steffen", "Harb"]]);
-
-// Selects based on the first name.
-jdbcTemplate.query("SELECT id, first_name, last_name FROM customers WHERE first_name = ?", new Object[] { "Josh" }, (rs, rowNum) -> new Customer(rs.getLong("id"), rs.getString("first_name"), rs.getString("last_name"))).forEach(customer -> log.info(customer.toString()));
-\end{lstlisting}
-
-Wir haben uns allerdings gegen JDBC entschieden, da JPA aus unserer Sicht die bessere Abstraktion darstellt.
+Wir haben uns für Spring JPA entschieden, da es für relationale Datenbanken gedacht ist.
 
 \subsubsection{JPA}
 
@@ -326,41 +296,42 @@ Danach stellen wir über das graphische Interface den folgende Graph zusammen, w
 
 Dies gibt SCDF alle Informationen die es benötigt, um die Konfigurierung vorzunehmen und die Pipeline zu deployen.
 
-\subsection{Spring Cloud Netflix}
+\subsection{Eureka}
 
-Spring Cloud Netflix enthält Unterstützung für die Netflix Open Source Software `Eureka', `Ribbon', `Zuul' und `Hystrix'.
-Diese sind dazu gedacht, Anfragen von Clients effizient an die richtigen Microservices weiterzuleiten.
+Eureka ist ein Discovery-Service, welcher als Teil des Spring Cloud Netflix Projekts unterstützt wird.
+Er verwaltet eine aktuelle Liste von verfügbaren Microservices und gibt auf Anfrage Auskunft über diese.
+Zusätzlich unterstützt Eureka simplistisches Load Balancing und erlaubt komplexeres Load Balancing, indem man einen entsprechend Wrapper dafür schreibt.
+Das native Load Balancing verteilt Anfragen nach dem Round-Robin Prinzip an die Services.
 
-\subsubsection{Eureka}
-
-Eureka verwaltet eine aktuelle Liste von verfügbaren Microservices und gibt auf Anfrage Auskunft über diese.
 Die Microservices müssen sich proaktiv bei Eureka registrieren um sichtbar zu sein.
+Dies geschieht in Spring durch eine einzelne Annotation:
 
-Zusätzlich unterstützt Eureka simplistisches Load Balancing und erlaubt das einführen von komplexerem Load Balancing indem man einen Wrapper dafür schreibt.
-Das native Load Balancing verteilt einfach Anfragen in einer festen Reihenfolge an die Services. (Round Robin)
+\begin{lstlisting}
+@SpringBootApplication
+@EnableDiscoveryClient
+public class VerleihServiceApplication {
 
-\subsubsection{Ribbon}
+	public static void main(String[] args) {
+		SpringApplication.run(VerleihServiceApplication.class, args);
+	}
 
-Ribbon bietet native Unterstützung für weitere Load Balancing-Verfahren und einfacheres definieren eigener Regeln.
-Zusätzlich unterstütz es die Fehlertoleranz des verteilten Systems indem es die Verfügbarkeit von Services prüft und darauf basierend entscheiden kann, wohin Anfragen gerichtet werden sollen.
+}
+\end{lstlisting}
 
-Ribbon kann direkt mit Eureka zusammenarbeiten um Services zu finden.
+Außerdem braucht man einen Eureka-Server.
+Dieser erfordert ähnlichen Aufwand:
 
-\subsubsection{Zuul}
+\begin{lstlisting}
+@SpringBootApplication
+@EnableEurekaServer
+public class EurekaServerApplication {
 
-Zuul erfüllt die Aufgaben Anfragen an Microservices entgegenzunehmen, zu filtern, und weiterzuleiten.
-Für das Entdecken der Services und Load Balancing ist es in der Lage mit Eureka und Ribbon zusammenzuarbeiten.
-
-Mit Zuul ist es unter Anderem möglich Anfragen zu Authentifizieren, fehlgeschlagene Anfragen zu wiederholen, und Datenverkehr zu Überwachen.
-Es ist die zentrale Anlaufstelle für alle Anfragen von Clients und bildet somit den Kern der Anfragenverarbeitung.
-
-\subsubsection{Hystrix}
-
-Hystrix wurde entwickelt um die negativen Auswirkungen von Latenz und Fehlschlägen von Anfragen zwischen Microservices zu vermindern.
-Es stoppt das Propagieren von Fehlschlägen, unterbricht zu lange Wartezeiten und erlaubt das Zurückfallen auf Notlösungen.
-Dabei muss die Art der Fehlerbehandlung fest vordefiniert werden und kann nicht dynamisch an die aktuelle Performance des Systems angepasst werden.\medskip
-
-Im Zusammenspiel lässt sich mit diesen Projekten der Netflix Open Source Software ein großer Teil des Bedarfs an Infrastruktur für Microservices decken.
+	public static void main(String[] args) {
+		SpringApplication.run(EurekaServerApplication.class, args);
+	}
+	
+}
+\end{lstlisting}
 
 \section{Zusammenfassung}
 
